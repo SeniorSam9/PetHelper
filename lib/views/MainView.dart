@@ -42,7 +42,10 @@ class _MainViewState extends State<MainView> {
       body: _tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: Theme.of(context).unselectedWidgetColor,
-        selectedItemColor: Color(0xFFCDBDF4),
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        // color: selected
+        //     ?
+        //     : Theme.of(context).hoverColor,
         // selectedItemColor: Theme.of(context).primaryColor,
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -52,19 +55,19 @@ class _MainViewState extends State<MainView> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.pets),
+            icon: Icon(Icons.pets_outlined),
             label: 'Pets',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
+            icon: Icon(Icons.favorite_outline),
             label: 'Favorites',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person_outline),
             label: 'Profile',
           ),
         ],
