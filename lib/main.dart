@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:swe463_project/models/ThemeProvider.dart';
 import 'views/LoginView.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => ThemeProvider(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,20 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Pets Helper',
       debugShowCheckedModeBanner: false,
-      // theme: ThemeData.light(useMaterial3: true),
-      // darkTheme: ThemeData.dark(useMaterial3: true),
-      theme: ThemeData(
-        useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: Color(0xFF827397), brightness: Brightness.light
-          ),
-        textTheme: TextTheme(
-          bodyLarge: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-      ),
+      theme: Provider.of<ThemeProvider>(context).currentTheme,
       home: const LoginView(),
     );
   }
