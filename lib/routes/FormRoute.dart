@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:swe463_project/utilities/cityFinder.dart';
 import '../utilities/locationFinder.dart';
 import '../utilities/imagePicker.dart';
 import '../components/CustomRadioButtonForPets.dart';
@@ -21,6 +22,9 @@ class _FormRouteState extends State<FormRoute> {
 
   String _urgentValue = 'Urgent';
   String _petKind = 'Dog';
+  late Map<String, double> _locationData;
+  XFile? _selectedImage = null;
+  String _city = 'Get my location';
 
   GlobalKey _buttonKey = GlobalKey();
 
@@ -41,13 +45,25 @@ class _FormRouteState extends State<FormRoute> {
                 /// title
                 SizedBox(height: 16.0),
                 Text("Add title", style: Theme.of(context).textTheme.bodyLarge),
+                SizedBox(height: 8.0),
                 TextFormField(
                   controller: _titleController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please fill in the title';
+                    }
+                    setState(() {
+                      _titleController.text = value;
+                    });
+                    return null;
+                  },
                   decoration: InputDecoration(
                       hintText: 'Write title here...',
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor))),
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      )),
                 ),
 
                 /// pet kind
@@ -151,34 +167,41 @@ class _FormRouteState extends State<FormRoute> {
                 /// location lat & lng
                 SizedBox(height: 16.0),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Spacer(),
                     ElevatedButton(
                       child: Row(
                         children: [
-                          Text("Get my location"),
+                          Text(_city),
                           Icon(Icons.location_on_outlined)
                         ],
                       ),
                       onPressed: () async {
-                        var locationData = await retrieveGPSLocation();
-                        if (locationData?['latitude'] == 0 &&
-                            locationData?['longitude'] == 0) {
+                        _locationData = (await retrieveGPSLocation())!;
+                        if (_locationData['latitude'] == 0 &&
+                            _locationData['longitude'] == 0) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text("Unable to get location")));
                           return;
                         }
+                        _city = (await fetchCityFromCoordinates(
+                            lat: _locationData['latitude'],
+                            lng: _locationData['longitude']))!;
+                        if (_city == 'Get my location') {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Unable to get location")));
+                          return;
+                        }
+
                         setState(() {
-                          _lat = locationData!['latitude']!;
-                          _lng = locationData['longitude']!;
+                          _lat = _locationData['latitude']!;
+                          _lng = _locationData['longitude']!;
+                          _city;
                         });
                       },
                     ),
-                    Spacer(),
                   ],
                 ),
-                Text(_lat.toString()),
-                Text(_lng.toString()),
 
                 /// upload
                 Container(
@@ -189,15 +212,18 @@ class _FormRouteState extends State<FormRoute> {
                     key: _buttonKey,
                     child: Text("Upload pet image"),
                     onPressed: () async {
-                      XFile? selectedImage = await pickImages();
+                      _selectedImage = await pickImages();
+                      if (_selectedImage == null) return;
+                      Theme.of(context).platform;
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: Text('Selected Image'),
                             content: Container(
-                                width: double.maxFinite,
-                                child: Image.file(File(selectedImage!.path))),
+                              width: double.maxFinite,
+                              child: getImageAlertDialog(_selectedImage!.path),
+                            ),
                             actions: [
                               TextButton(
                                 child: Text('Confirm'),
@@ -225,13 +251,25 @@ class _FormRouteState extends State<FormRoute> {
                 SizedBox(height: 16.0),
                 Text("Add description",
                     style: Theme.of(context).textTheme.bodyLarge),
+                SizedBox(height: 8.0),
                 TextFormField(
+                  maxLength: 150,
                   minLines: 3,
                   maxLines: 4,
                   controller: _descriptionController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please fill in the description';
+                    }
+                    setState(() {
+                      _descriptionController.text = value;
+                    });
+                    return null;
+                  },
                   decoration: InputDecoration(
                       hintText: 'Write addition description here ...',
                       border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
                           borderSide: BorderSide(
                               color: Theme.of(context).primaryColor))),
                 ),
@@ -245,7 +283,15 @@ class _FormRouteState extends State<FormRoute> {
                     children: [
                       ElevatedButton(
                           // TODO: add post logic
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_formKey.currentState!.validate() &&
+                                _locationData['latitude'] != 0 &&
+                                _locationData['longitude'] != 0 &&
+                                _selectedImage != null) {
+                              _formKey.currentState!.save();
+                              // The form is valid, proceed with POST logic
+                            }
+                          },
                           child: Text("Post"),
                           style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.all(32.0))),
@@ -260,13 +306,32 @@ class _FormRouteState extends State<FormRoute> {
                   ),
                 ),
 
-                /// aux
+                /// aux - testing
                 SizedBox(height: 96.0),
+                Text(_titleController.text,
+                    style: TextStyle(color: Colors.red)),
+                Text(_petKind, style: TextStyle(color: Colors.red)),
+                Text(_urgentValue, style: TextStyle(color: Colors.red)),
+                Text(_lat.toString(), style: TextStyle(color: Colors.red)),
+                Text(_lng.toString(), style: TextStyle(color: Colors.red)),
+                Text(_descriptionController.text,
+                    style: TextStyle(color: Colors.red)),
+                Text(_selectedImage?.path ?? "",
+                    style: TextStyle(color: Colors.red))
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Image getImageAlertDialog(String path) {
+    TargetPlatform platform = Theme.of(context).platform;
+    if (platform == TargetPlatform.android || platform == TargetPlatform.iOS) {
+      return Image.file(File(path));
+    } else {
+      return Image.network(path);
+    }
   }
 }
