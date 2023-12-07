@@ -1,9 +1,22 @@
-import { initializeApp, cert } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-import serviceAccount from "./petHelper_creds.js";
+import { getFirestore } from "firebase/firestore";
 
-initializeApp({ credential: cert(serviceAccount) });
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-const db = getFirestore();
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAtHSciFbQDdX-KvHb7VQymWv25bO5ycPE",
+  authDomain: "pet-helper-d7674.firebaseapp.com",
+  projectId: "pet-helper-d7674",
+  storageBucket: "pet-helper-d7674.appspot.com",
+  messagingSenderId: "808605250051",
+  appId: "1:808605250051:web:570001d5fc3e289610d436"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 export { db };

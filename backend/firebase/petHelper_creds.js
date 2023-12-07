@@ -1,15 +1,17 @@
-const serviceAccount={
-                                "type": "service_account",
-                                "project_id": "pet-helper-d7674",
-                                "private_key_id": "f16beed6ea7995fe2d712b3ee88085c332ced680",
-                                "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDc9OYrHkg6i9pO\ndbFFGm30R/UysJjjTdI3+VCVtpSjfSfTCpRpTZt64436dOTa4hoI4RBy1W6mAlsJ\nWICaLCeIjCI0XDS+BLeEGsYn3f1WHJKwb4w0qJT3+cuDVDseJU4KNyXrYgEmcD+j\nddxmKGN1UVjBV4vGa9IOVJcYQ148RJUl8QcC7ntns9nS2qcwxJc5Gdvl9oH9uiZL\n13snAT339t4ScaBmzmTYKQCpJ0RF2LPeaGBBUrJnpJg1HqPazIOLRZHgbobXSfvi\n9H3qruRDFqgzD/qph4IrVZo/EQCuT9WtQsm3n3Jz9TYKvvQZjdxoKjqEnpFux8UN\nPBn689EbAgMBAAECggEAN+abntgL9Qfx5LzA6xc7LzzPS5JDM+q53yBr41yscUpW\nO33nO1b/mZEdl/pf9gKTDKEIPM1Dr6tT5eLmslqua8zsUGvtig9+cGUnselnURRs\nhkfKZH4sJiqj8udqB3/vpQT7ynfii5uFdjD44D2ioAlDF7My8THRFIARM/nDSyKk\nWNnL8r7ZbTm8NbsC0WjS0WOvYLauBODDgqp1FMFJ4QPuZ3eFLEPRyWSLuwjb3wDl\nOXMjKnTIoArJicheq4jIt3vAwq2B4v4CeKgF24HUeIPuBUBLGdnINs3fGFUcLP2H\njIytIsoBAaezoFg/D6cKe5qNJcaJSnQzB0q+qEAoZQKBgQD37ryCuj8DPVM7O+kH\nKgpPAxIc7UrIKk12meZnXkxo3K5VFg1aUaOuq4S+OlVjC+u1FF8FyusCAoi+ByEI\nARHEwKHAfd1gbIkFYptuzVVykg33oM50/okxU7cu3bC/ZK8kpWL36MZ/SHQwf/HX\ngltMq5lttgeC7lL+VdG7VwI9rQKBgQDkJXRw0kXXyIB7Bkbp+ATgRkvK+jbCBgYy\nz6f5P1UiZMWpIhjPOPbVQGBWevJKGH6S5+Q98Zeqwxmetkt68yDyAFcQEmBKLPcW\nd4ogaCMSt0H6iHJiPTHmNK5Y4Vx62IExlN4Gkvo13hXjWZix5yqfkWFBxig2j4Ce\nbSdI0PgS5wKBgDW7NHl0WZGfKbmNm0vlLYTAGp3QQ0Or/0uzwL4oLpEPOmzQMaag\nSMPjAgqj47tqavO8bXd46YNu/ymHq/3rFWm5gZSQ8ngiLXPQUfUqZNlGk+ZVoEi0\nnRDmnq12eAaSkG51tUQa22HcVunn4IafBqBQFBk1uN0EP1JFUQWzrpWlAoGAbwBC\nLPpBfQFScYjWS9OeG7hX/APNTI09ys75vO0xcLBy8x1h0MC4Z30Q4kKjS6WrP7KP\nfAvlbPHLr0qmYsWUC+pacblfG/fQqB+1FptUJTEAavKkJGP9uTF8ekX7htF72jHB\n7JTqI/dP0vOutS/xrv0+wo+01Qbw3yPgby8s45UCgYANYxYE8v/hbzYAbId/jTk7\n5NgDy7MGUvj16UPV3BzLz9JbFYGqKu4axOwZ8AgU4KeLMSsoz/uDziIcI1IJNTte\n0ng1iCqs12bHhsf9rZKr5sk/T1XoObjsFCrKudAr6PShKSMVjAqv9tvIXmSZVrlF\nm2Tf+5IKGj5usbJa7VlpAA==\n-----END PRIVATE KEY-----\n",
-                                "client_email": "firebase-adminsdk-ece98@pet-helper-d7674.iam.gserviceaccount.com",
-                                "client_id": "116577116049893142078",
-                                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                                "token_uri": "https://oauth2.googleapis.com/token",
-                                "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                                "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-ece98%40pet-helper-d7674.iam.gserviceaccount.com",
-                                "universe_domain": "googleapis.com"
-                              }
-;
+// Import the functions you need from the SDKs you need
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAtHSciFbQDdX-KvHb7VQymWv25bO5ycPE",
+  authDomain: "pet-helper-d7674.firebaseapp.com",
+  projectId: "pet-helper-d7674",
+  storageBucket: "pet-helper-d7674.appspot.com",
+  messagingSenderId: "808605250051",
+  appId: "1:808605250051:web:570001d5fc3e289610d436"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 export default serviceAccount;

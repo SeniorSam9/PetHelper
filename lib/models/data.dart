@@ -1,3 +1,4 @@
+
 class Pet {
   final String name;
   final String image;
@@ -17,6 +18,11 @@ class Pet {
     final petIndex = pets.indexWhere((pet) => pet.id == id);
     pets[petIndex].favorite = !pets[petIndex].favorite;
 
+  }
+  // a get pets from backend api
+  List<Pet> getPets() {
+
+    return pets;
   }
 }
 final List<Pet> pets = [
