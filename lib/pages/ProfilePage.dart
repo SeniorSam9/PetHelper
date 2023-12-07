@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -6,6 +7,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  int itemCount = 10; 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,17 +25,19 @@ class _ProfilePageState extends State<ProfilePage> {
                   image: AssetImage('assets/images/profileBackground.jpg'),
                   fit: BoxFit.cover,
                 ),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Hello, Ammar!',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
+                title: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Hello, There!',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -51,20 +56,88 @@ class _ProfilePageState extends State<ProfilePage> {
               child: TabBarView(
                 children: [
                   ListView.builder(
-                    itemCount: 10,
+                    itemCount: itemCount,
                     itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        title: Text('Adopted Item $index'),
-                      );
+                      return buildCard(index);
                     },
                   ),
+                  // Second tab content
                   ListView.builder(
-                    itemCount: 10,
+                    itemCount: itemCount,
                     itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        title: Text('Reported Item $index'),
-                      );
+                      return buildCard(index);
                     },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildCard(int index) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Image(
+                image: AssetImage('assets/images/injured bird.png'),
+                width: 120,
+                height: 120,
+              ),
+            ),
+            SizedBox(width: 6),
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Announcement title $index',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.location_city),
+                      Text("Medinah"),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        CupertinoIcons.exclamationmark,
+                      ),
+                      Text("very urgent")
+
+                    ],
+                  ),
+                  SizedBox(height: 6),
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Text(
+                      "Adopted",
+                      style: TextStyle(
+                        color: Colors.white, // Fixed color
+                      ),
+
+                    ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.purple[100]
+                  ),
                   ),
                 ],
               ),
