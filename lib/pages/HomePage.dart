@@ -29,7 +29,16 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         Expanded(
-          child: ListOfPets(),
+          child:Column(
+            children: [
+              Center(
+                child: Text('List of Pets'),
+              ),
+              Expanded(
+                child: ListOfPets(),
+              ),
+            ],
+          )
         ),
       ],
     );
