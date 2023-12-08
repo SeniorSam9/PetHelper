@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../models/data.dart';
+
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -56,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: TabBarView(
                 children: [
                   ListView.builder(
-                    itemCount: itemCount,
+                    itemCount: pets.length,
                     itemBuilder: (BuildContext context, int index) {
                       return buildCard(index);
                     },
@@ -86,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Expanded(
               flex: 1,
               child: Image(
-                image: AssetImage('assets/images/injured bird.png'),
+                image: AssetImage(pets[index].image),
                 width: 120,
                 height: 120,
               ),
@@ -98,13 +100,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Announcement title $index',
+                    pets[index].name,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Row(
                     children: [
                       Icon(Icons.location_city),
-                      Text("Medinah"),
+                      Text(pets[index].location),
                     ],
                   ),
                 ],
@@ -121,7 +123,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Icon(
                         CupertinoIcons.exclamationmark,
                       ),
-                      Text("very urgent")
+                      Text(pets[index].urgency.stringValue)
 
                     ],
                   ),
@@ -129,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ElevatedButton(
                     onPressed: () {},
                     child: Text(
-                      "Adopted",
+                      pets[index].adopted.toString() ,
                       style: TextStyle(
                         color: Colors.white, // Fixed color
                       ),

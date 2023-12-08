@@ -1,4 +1,18 @@
 enum AnimalType {cat, dog, fish, bird, other}
+enum Urgency { nonUrgent, Urgent, veryUrgent}
+extension UrgencyExtension on Urgency {
+  String get stringValue {
+    switch (this) {
+      case Urgency.nonUrgent:
+        return "Non Urgent";
+      case Urgency.Urgent:
+        return "Urgent";
+      case Urgency.veryUrgent:
+        return "Very Urgent";
+    }
+  }
+}
+
 class Pet {
   final String name;
   final String image;
@@ -8,6 +22,8 @@ class Pet {
   final AnimalType animaltype ;
   final bool adopted ;
   final String describtion ;
+  final Urgency urgency ;
+
   Pet({
     required this.adopted, required this.animaltype, required this.describtion,
     required this.name,
@@ -15,6 +31,7 @@ class Pet {
     required this.location,
     required this.id,
     required this.favorite,
+    required this.urgency
   });
   // user clicks the favorite button
   void toggleFavorite(String id) {
@@ -37,7 +54,8 @@ final List<Pet> pets = [
       id: '1',
       adopted: false,
       animaltype: AnimalType.dog,
-      describtion: "fluffy need help call me on -xxx"
+      describtion: "fluffy need help call me on -xxx",
+      urgency: Urgency.nonUrgent
   ),
   Pet(
       name: 'Whiskers',
@@ -47,7 +65,8 @@ final List<Pet> pets = [
       id: '2',
       adopted: false,
       animaltype: AnimalType.dog,
-      describtion: "Whiskers need help call me on -xxx"
+      describtion: "Whiskers need help call me on -xxx",
+      urgency: Urgency.nonUrgent
 
 
   ),
@@ -60,7 +79,8 @@ final List<Pet> pets = [
       id: '3',
       adopted: false,
       animaltype: AnimalType.dog,
-      describtion: "Spot need help call me on -xxx"
+      describtion: "Spot need help call me on -xxx",
+      urgency: Urgency.nonUrgent
 
   ),
   Pet(
@@ -71,7 +91,8 @@ final List<Pet> pets = [
       id: '4',
       adopted: false,
       animaltype: AnimalType.cat,
-      describtion: "mittens need help call me on -xxx"
+      describtion: "mittens need help call me on -xxx",
+      urgency: Urgency.nonUrgent
 
 
   ),
@@ -83,18 +104,20 @@ final List<Pet> pets = [
       id: '5',
       adopted: false,
       animaltype: AnimalType.dog,
-      describtion: "Buddy need help call me on -xxx"
+      describtion: "Buddy need help call me on -xxx",
+      urgency: Urgency.nonUrgent
 
   ),
   Pet(
       name: 'Spike',
-      image: './assets/images/bird.png',
+      image: './assets/images/injured bird.png',
       location: 'Riyadh 2km',
       favorite: false,
       id: '6',
       adopted: false,
       animaltype: AnimalType.dog,
-      describtion: "Spike need help call me on -xxx"
+      describtion: "Spike need help call me on -xxx",
+      urgency: Urgency.nonUrgent
 
   ),
 ];
