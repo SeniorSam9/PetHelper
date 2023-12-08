@@ -22,11 +22,15 @@ class CustomRadioButton extends StatelessWidget {
         }
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 2.0),
-        color: selected
-            ? Theme.of(context).colorScheme.primary
-            : Theme.of(context).hoverColor,
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 6.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          color: selected
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).hoverColor,
+        ),
+        padding:
+        const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16.0),
         child: Text(
           value,
           style: TextStyle(

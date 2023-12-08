@@ -210,7 +210,12 @@ class _FormRouteState extends State<FormRoute> {
                   height: 64,
                   child: ElevatedButton(
                     key: _buttonKey,
-                    child: Text("Upload pet image"),
+                    style: ElevatedButton.styleFrom(
+                      elevation: 8,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                    ),
                     onPressed: () async {
                       _selectedImage = await pickImages();
                       if (_selectedImage == null) return;
@@ -235,8 +240,7 @@ class _FormRouteState extends State<FormRoute> {
                                 child: Text('Retry'),
                                 onPressed: () async {
                                   Navigator.of(context).pop();
-                                  (_buttonKey.currentWidget as ElevatedButton)
-                                      .onPressed!();
+                                  (_buttonKey.currentWidget as ElevatedButton).onPressed!();
                                 },
                               ),
                             ],
@@ -244,8 +248,17 @@ class _FormRouteState extends State<FormRoute> {
                         },
                       );
                     },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.image),
+                        SizedBox(width: 8),
+                        Text("Upload pet image"),
+                      ],
+                    ),
                   ),
                 ),
+
 
                 /// description
                 SizedBox(height: 16.0),
