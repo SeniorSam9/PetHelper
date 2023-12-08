@@ -294,8 +294,16 @@ class _FormRouteState extends State<FormRoute> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+
                       ElevatedButton(
-                          // TODO: add post logic
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("Cancel"),
+                          style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.all(32.0))),
+                      ElevatedButton(
+                        // TODO: add post logic
                           onPressed: () {
                             if (_formKey.currentState!.validate() &&
                                 _locationData['latitude'] != 0 &&
@@ -308,13 +316,6 @@ class _FormRouteState extends State<FormRoute> {
                           child: Text("Post"),
                           style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.all(32.0))),
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text("Cancel"),
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.all(32.0)))
                     ],
                   ),
                 ),
