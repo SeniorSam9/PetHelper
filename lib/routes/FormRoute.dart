@@ -48,6 +48,7 @@ class _FormRouteState extends State<FormRoute> {
                 SizedBox(height: 8.0),
                 TextFormField(
                   controller: _titleController,
+                  maxLength: 20,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please fill in the title';

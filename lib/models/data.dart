@@ -48,7 +48,7 @@ class Pet {
 final List<Pet> pets = [
   Pet(
       name: 'Fluffy',
-      image: './assets/images/cat.png',
+      image: './assets/images/sad dog.png',
       location: 'Dammam 4km',
       favorite: true,
       id: '1',
@@ -59,13 +59,13 @@ final List<Pet> pets = [
   ),
   Pet(
       name: 'Whiskers',
-      image: './assets/images/cat.png',
+      image: './assets/images/street hamster .png',
       location: 'Riyadh 2km',
       favorite: false,
       id: '2',
       adopted: false,
-      animaltype: AnimalType.dog,
-      describtion: "Whiskers need help call me on -xxx",
+      animaltype: AnimalType.other,
+      describtion: "Hamster need help call me on -xxx",
       urgency: Urgency.nonUrgent
 
 
@@ -73,19 +73,19 @@ final List<Pet> pets = [
 
   Pet(
       name: 'Spot',
-      image: './assets/images/cat.png',
+      image: './assets/images/street cat.png',
       location: 'Jeddah 3km',
       favorite: false,
       id: '3',
       adopted: false,
-      animaltype: AnimalType.dog,
+      animaltype: AnimalType.cat,
       describtion: "Spot need help call me on -xxx",
       urgency: Urgency.nonUrgent
 
   ),
   Pet(
       name: 'Mittens',
-      image: './assets/images/fish.png',
+      image: './assets/images/street cat.png',
       location: 'Khobar 1km',
       favorite: false,
       id: '4',
@@ -97,19 +97,19 @@ final List<Pet> pets = [
 
   ),
   Pet(
-      name: 'Buddy',
-      image: './assets/images/dog.png',
+      name: 'Fish need help',
+      image: './assets/images/injured fish.png',
       location: 'Dammam 4km',
       favorite: false,
       id: '5',
       adopted: false,
-      animaltype: AnimalType.dog,
-      describtion: "Buddy need help call me on -xxx",
+      animaltype: AnimalType.fish,
+      describtion: "This fish need help call me on -xxx",
       urgency: Urgency.nonUrgent
 
   ),
   Pet(
-      name: 'Spike',
+      name: 'حالة انسانية طير في شمال الرياض',
       image: './assets/images/injured bird.png',
       location: 'Riyadh 2km',
       favorite: false,
