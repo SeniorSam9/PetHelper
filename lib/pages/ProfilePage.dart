@@ -9,7 +9,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  int itemCount = 10; 
 
   @override
   Widget build(BuildContext context) {
@@ -82,24 +81,24 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget buildCard(int index) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(2, 6, 2, 6),
+        padding: const EdgeInsets.fromLTRB(10, 6, 2, 6),
         child: Row(
           children: [
-            Expanded(
-              flex: 1,
-              child: Container(
-                width: 120,
-                height: 110,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
-                    image: AssetImage(pets[index].image),
-                    fit: BoxFit.cover,
-                  ),
+            Container(
+              width: 100,
+              height: 90,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image(
+                  width: 90,
+                  height: 80,
+                  fit: BoxFit.cover,
+                  image: AssetImage(pets[index].image),
                 ),
               ),
             ),
-            SizedBox(width: 4),
+
+            SizedBox(width: 18 ),
             Expanded(
               flex: 2,
               child: Column(
@@ -118,8 +117,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
+            SizedBox(width: 8),
             Expanded(
-              flex: 1,
+              flex: 0,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,20 +129,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       Icon(
                         CupertinoIcons.exclamationmark,
                       ),
-                      Text(pets[index].urgency.stringValue)
-
+                      Text(pets[index].urgency.stringValue),
                     ],
                   ),
                   SizedBox(height: 6),
-                  Container(
-                    width: 80,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: Text(
-                        pets[index].adopted.toString() ,
-
-                      ),
-
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Text(
+                      pets[index].adopted.toString(),
                     ),
                   ),
                 ],
@@ -152,6 +146,8 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+
+
   }
 }
 
