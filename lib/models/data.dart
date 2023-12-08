@@ -89,7 +89,7 @@ final List<Pet> pets = [
       location: 'Khobar 1km',
       favorite: false,
       id: '4',
-      adopted: false,
+      adopted: true,
       animaltype: AnimalType.cat,
       describtion: "mittens need help call me on -xxx",
       urgency: Urgency.nonUrgent

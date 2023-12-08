@@ -9,6 +9,13 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  List<Pet> adoptedPets = [];
+  List<Pet> reportedPets = [];
+  @override
+   void initState(){
+      adoptedPets = pets.where((pet) => pet.adopted).toList() ;
+      reportedPets = pets.where((pet) => !pet.adopted).toList() ;
+      super.initState() ; }
 
   @override
   Widget build(BuildContext context) {
@@ -57,16 +64,16 @@ class _ProfilePageState extends State<ProfilePage> {
               child: TabBarView(
                 children: [
                   ListView.builder(
-                    itemCount: pets.length,
+                    itemCount: adoptedPets.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return buildCard(index);
+                      return buildCard(adoptedPets[index]);
                     },
                   ),
                   // Second tab content
                   ListView.builder(
-                    itemCount: pets.length,
+                    itemCount: reportedPets.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return buildCard(index);
+                      return buildCard(reportedPets[index]);
                     },
                   ),
                 ],
@@ -78,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget buildCard(int index) {
+  Widget buildCard(Pet pet) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 6, 2, 6),
@@ -93,25 +100,25 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 90,
                   height: 80,
                   fit: BoxFit.cover,
-                  image: AssetImage(pets[index].image),
+                  image: AssetImage(pet.image),
                 ),
               ),
             ),
 
-            SizedBox(width: 18 ),
+            SizedBox(width: 18),
             Expanded(
               flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    pets[index].name,
+                    pet.name,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Row(
                     children: [
                       Icon(Icons.location_city),
-                      Text(pets[index].location),
+                      Text(pet.location),
                     ],
                   ),
                 ],
@@ -129,14 +136,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       Icon(
                         CupertinoIcons.exclamationmark,
                       ),
-                      Text(pets[index].urgency.stringValue),
+                      Text(pet.urgency.stringValue),
                     ],
                   ),
                   SizedBox(height: 6),
                   ElevatedButton(
                     onPressed: () {},
                     child: Text(
-                      pets[index].adopted.toString(),
+                      pet.adopted ? "Adopted" : "Reported",
                     ),
                   ),
                 ],
@@ -146,9 +153,8 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
-
-
   }
+
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
