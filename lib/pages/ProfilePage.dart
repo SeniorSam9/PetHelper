@@ -113,12 +113,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Text(
                     pet.name,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.labelMedium,
                   ),
                   Row(
                     children: [
                       Icon(Icons.location_city),
-                      Text(pet.location),
+                      Text(pet.location, style: Theme.of(context).textTheme.labelSmall),
                     ],
                   ),
                 ],
@@ -136,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Icon(
                         CupertinoIcons.exclamationmark,
                       ),
-                      Text(pet.urgency.stringValue),
+                      Text(pet.urgency.stringValue, style: Theme.of(context).textTheme.labelMedium,),
                     ],
                   ),
                   SizedBox(height: 6),

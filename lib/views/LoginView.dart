@@ -56,7 +56,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Background color #827397
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -68,171 +68,175 @@ class _LoginViewState extends State<LoginView> {
             Provider.of<ThemeProvider>(context).currentTheme ==
                     ThemeProvider().currentTheme
                 ? Icons.nightlight_round
-                : Icons.lightbulb,
+                : Icons.sunny,
             color: const Color(0xFF827397), // Set the desired color #827397
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "PetHelper",
-                style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
-                    'assets/images/loginIcon1.svg',
-                    width: 50,
-                    height: 50,
-                    color: const Color(0xFF827397),
+                  Text(
+                    "PetHelper",
+                    style: Theme.of(context).textTheme.headlineLarge,
                   ),
-                  SvgPicture.asset(
-                    'assets/images/loginIcon2.svg',
-                    width: 50,
-                    height: 50,
-                    color: const Color(0xFF827397),
+                  SizedBox(
+                    height: 20,
                   ),
-                  SvgPicture.asset(
-                    'assets/images/loginIcon3.svg',
-                    width: 50,
-                    height: 50,
-                    color: const Color(0xFF827397),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/loginIcon1.svg',
+                        width: 50,
+                        height: 50,
+                        color: const Color(0xFF827397),
+                      ),
+                      SvgPicture.asset(
+                        'assets/images/loginIcon2.svg',
+                        width: 50,
+                        height: 50,
+                        color: const Color(0xFF827397),
+                      ),
+                      SvgPicture.asset(
+                        'assets/images/loginIcon3.svg',
+                        width: 50,
+                        height: 50,
+                        color: const Color(0xFF827397),
+                      ),
+                      SvgPicture.asset(
+                        'assets/images/loginIcon4.svg',
+                        width: 50,
+                        height: 50,
+                        color: const Color(0xFF827397),
+                      ),
+                    ],
                   ),
-                  SvgPicture.asset(
-                    'assets/images/loginIcon4.svg',
-                    width: 50,
-                    height: 50,
-                    color: const Color(0xFF827397),
+                  SizedBox(height: 100),
+                  Form(
+                    key: _formKey,
+                    child: Column(children: [
+                      TextFormField(
+                        validator: (value) {
+                          // not much of a validaiton is done here
+                          // we will be using firebase to login
+                          if (value == null || value.isEmpty) {
+                            return "Please enter a valid email";
+                          }
+                          return null;
+                        },
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          suffixIcon: Icon(Icons.email_outlined),
+                          label: const Text('Email'),
+                          hintText: 'Enter your email',
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter a valid password";
+                          }
+                          return null;
+                        },
+                        obscureText: _passwordHidden,
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          suffixIcon: GestureDetector(
+                            child: Icon(_passwordHidden
+                                ? Icons.visibility_off
+                                : Icons.visibility),
+                            onTap: () {
+                              setState(() {
+                                _passwordHidden = !_passwordHidden;
+                              });
+                            },
+                          ),
+                          label: const Text('Password'),
+                          hintText: 'Enter your password',
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.red,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Implement your login logic here
+                      if (_formKey.currentState!.validate()) {
+                        // If the form is valid, display a snackbar. In the real world,
+                        // you'd often call a server or save the information in a database.
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Loading...')),
+                        );
+                        submitLoginForm();
+                      }
+                    },
+                    child: Text('Login'),
+                  ),
+                  SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to the signup screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignUpView()),
+                      );
+                    },
+                    child: Text(
+                      'Don\'t have an account? Sign up here.',
+                      style: TextStyle(
+                        color: const Color(0xFF827397),
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
                   ),
                 ],
               ),
-              SizedBox(height: 100),
-              Form(
-                key: _formKey,
-                child: Column(children: [
-                  TextFormField(
-                    validator: (value) {
-                      // not much of a validaiton is done here
-                      // we will be using firebase to login
-                      if (value == null || value.isEmpty) {
-                        return "Please enter a valid email";
-                      }
-                      return null;
-                    },
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.email_outlined),
-                      label: const Text('Email'),
-                      hintText: 'Enter your email',
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.black,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.red,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter a valid password";
-                      }
-                      return null;
-                    },
-                    obscureText: _passwordHidden,
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      suffixIcon: GestureDetector(
-                        child: Icon(_passwordHidden
-                            ? Icons.visibility_off
-                            : Icons.visibility),
-                        onTap: () {
-                          setState(() {
-                            _passwordHidden = !_passwordHidden;
-                          });
-                        },
-                      ),
-                      label: const Text('Password'),
-                      hintText: 'Enter your password',
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.black,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.red,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ]),
-              ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  // Implement your login logic here
-                  if (_formKey.currentState!.validate()) {
-                    // If the form is valid, display a snackbar. In the real world,
-                    // you'd often call a server or save the information in a database.
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Loading...')),
-                    );
-                    submitLoginForm();
-                  }
-                },
-                child: Text('Login'),
-              ),
-              SizedBox(height: 16),
-              GestureDetector(
-                onTap: () {
-                  // Navigate to the signup screen
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignUpView()),
-                  );
-                },
-                child: Text(
-                  'Don\'t have an account? Sign up here.',
-                  style: TextStyle(
-                    color: const Color(0xFF827397),
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
