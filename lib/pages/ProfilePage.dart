@@ -65,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   // Second tab content
                   ListView.builder(
-                    itemCount: itemCount,
+                    itemCount: pets.length,
                     itemBuilder: (BuildContext context, int index) {
                       return buildCard(index);
                     },
@@ -82,18 +82,24 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget buildCard(int index) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+        padding: const EdgeInsets.fromLTRB(2, 6, 0, 6),
         child: Row(
           children: [
             Expanded(
               flex: 1,
-              child: Image(
-                image: AssetImage(pets[index].image),
+              child: Container(
                 width: 120,
-                height: 120,
+                height: 110,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    image: AssetImage(pets[index].image),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
-            SizedBox(width: 6),
+            SizedBox(width: 4),
             Expanded(
               flex: 2,
               child: Column(
@@ -132,14 +138,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () {},
                     child: Text(
                       pets[index].adopted.toString() ,
-                      style: TextStyle(
-                        color: Colors.white, // Fixed color
-                      ),
+                      // style: TextStyle(
+                      //   color: Color(0xFF827397), // Fixed color
+                      // ),
 
                     ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.purple[100]
-                  ),
+                  // style: ElevatedButton.styleFrom(
+                  //   primary: Colors.purple[100]
+                  // ),
                   ),
                 ],
               ),
