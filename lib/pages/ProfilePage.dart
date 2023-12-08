@@ -82,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget buildCard(int index) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(2, 6, 0, 6),
+        padding: const EdgeInsets.fromLTRB(2, 6, 2, 6),
         child: Row(
           children: [
             Expanded(
@@ -134,18 +134,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                   ),
                   SizedBox(height: 6),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      pets[index].adopted.toString() ,
-                      // style: TextStyle(
-                      //   color: Color(0xFF827397), // Fixed color
-                      // ),
+                  Container(
+                    width: 80,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        pets[index].adopted.toString() ,
+
+                      ),
 
                     ),
-                  // style: ElevatedButton.styleFrom(
-                  //   primary: Colors.purple[100]
-                  // ),
                   ),
                 ],
               ),
