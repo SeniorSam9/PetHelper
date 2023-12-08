@@ -5,6 +5,7 @@ import '../routes/CertainPetRoute.dart';
 class ListOfPets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     return GridView.builder(
       padding: EdgeInsets.all(8),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -37,8 +38,8 @@ class ListOfPets extends StatelessWidget {
                 Container(
                   height: 100,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(18),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(18),
                     ),
                     image: DecorationImage(
                       image: AssetImage(pet.image),
