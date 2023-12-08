@@ -4,7 +4,9 @@ class Pet {
   final String location;
   final String id;
   late final bool favorite;
-
+  // final String type ;
+  // final bool adopted;
+  // final String describtion ;
   Pet({
     required this.name,
     required this.image,
