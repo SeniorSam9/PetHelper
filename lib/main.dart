@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:swe463_project/models/ThemeProvider.dart';
+import 'package:swe463_project/models/data.dart';
 import 'views/LoginView.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => ThemeProvider(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<PetProvider>(
+        create: (context) => PetProvider(),
+      ),
+      ChangeNotifierProvider<ThemeProvider>(
+        create: (context) => ThemeProvider(),
+      ),
+    ],
     child: const MyApp(),
   ));
 }

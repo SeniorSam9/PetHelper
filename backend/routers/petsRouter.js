@@ -13,13 +13,13 @@ export const petsRouter = express.Router();
 
 // get all pets
 petsRouter.get("/", async (req, res) => {
-  const { uid } = req.body;
   const pets = [];
-  const ref = collection(db, "Users", uid, "Pets");
+  const ref = collection(db, "pets");
   const snapshot = await getDocs(ref);
   snapshot.forEach((doc) => {
     pets.push({ ...doc.data(), id: doc.id });
   });
+  console.log(pets);
   res.json({ status: true, data: pets });
 });
 // add pet
