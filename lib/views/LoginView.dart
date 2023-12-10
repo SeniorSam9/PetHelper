@@ -4,9 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:swe463_project/views/MainView.dart';
 import '../models/ThemeProvider.dart';
-import 'SignUpView.dart';
+import './SignUpView.dart';
 import 'package:http/http.dart' as http;
-import '../pages/PetDetails.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -28,7 +27,7 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  Future<void> submitLoginForm() async {
+  Future<bool> submitLoginForm() async {
     final Map<String, dynamic> loginData = {
       'email': _emailController.text,
       'password': _passwordController.text
@@ -44,13 +43,16 @@ class _LoginViewState extends State<LoginView> {
         // successful response
         final jsonRes = jsonDecode(response.body);
         print('Login successful: $jsonRes');
+        return true;
       } else {
         // Failed login, handle the error
         print('Failed to login. Status code: ${response.statusCode}');
         print('Response body: ${response.body}');
+        return false;
       }
     } catch (e) {
       print('Error: $e');
+      return false;
     }
   }
 
@@ -206,21 +208,33 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // Implement your login logic here
                       // backend not tested yet
-                      // if (_formKey.currentState!.validate()) {
-                      //   // If the form is valid, display a snackbar. In the real world,
-                      //   // you'd often call a server or save the information in a database.
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     const SnackBar(content: Text('Loading...')),
-                      //   );
-                      //   submitLoginForm();
-                      // }
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => PetDetails()),
-                      );
+                      if (_formKey.currentState!.validate()) {
+                        // If the form is valid, display a snackbar. In the real world,
+                        // you'd often call a server or save the information in a database.
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Loading...')),
+                        );
+                        if (await submitLoginForm()) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => MainView()),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text(
+                                    'Error has occured, please try again.')),
+                          );
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginView()),
+                          );
+                        }
+                      }
                     },
                     child: Text('Login'),
                   ),
@@ -234,7 +248,7 @@ class _LoginViewState extends State<LoginView> {
                       );
                     },
                     child: Text(
-                      'Don\'t have an account? Sign up here.',
+                      'Don\'t have an account? SignUp here.',
                       style: TextStyle(
                         color: const Color(0xFF827397),
                         decoration: TextDecoration.underline,
