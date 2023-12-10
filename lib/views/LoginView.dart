@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:swe463_project/views/MainView.dart';
 import '../models/ThemeProvider.dart';
 import 'SignUpView.dart';
 import 'package:http/http.dart' as http;
+import '../pages/PetDetails.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -206,14 +208,19 @@ class _LoginViewState extends State<LoginView> {
                   ElevatedButton(
                     onPressed: () {
                       // Implement your login logic here
-                      if (_formKey.currentState!.validate()) {
-                        // If the form is valid, display a snackbar. In the real world,
-                        // you'd often call a server or save the information in a database.
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Loading...')),
-                        );
-                        submitLoginForm();
-                      }
+                      // backend not tested yet
+                      // if (_formKey.currentState!.validate()) {
+                      //   // If the form is valid, display a snackbar. In the real world,
+                      //   // you'd often call a server or save the information in a database.
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     const SnackBar(content: Text('Loading...')),
+                      //   );
+                      //   submitLoginForm();
+                      // }
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => PetDetails()),
+                      );
                     },
                     child: Text('Login'),
                   ),
