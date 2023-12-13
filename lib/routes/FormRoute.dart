@@ -1,8 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:swe463_project/models/UserProvider.dart';
+import 'package:swe463_project/models/data.dart';
 import 'package:swe463_project/utilities/cityFinder.dart';
+import '../utilities/getImagePlatform.dart';
 import '../utilities/locationFinder.dart';
 import '../utilities/imagePicker.dart';
 import '../components/CustomRadioButtonForPets.dart';
@@ -16,12 +19,13 @@ class FormRoute extends StatefulWidget {
 class _FormRouteState extends State<FormRoute> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _contactController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   double _lng = 0;
   double _lat = 0;
 
   String _urgentValue = 'Urgent';
-  String _petKind = 'Dog';
+  String _animal_type = 'Dog';
   late Map<String, double> _locationData;
   XFile? _selectedImage = null;
   String _city = 'Get my location';
@@ -78,50 +82,50 @@ class _FormRouteState extends State<FormRoute> {
                         CustomRadioButtonForPets(
                           value: 'Dog',
                           imageURL: 'assets/images/dog.png',
-                          groupValue: _petKind,
+                          groupValue: _animal_type,
                           onChanged: (value) {
                             setState(() {
-                              _petKind = value;
+                              _animal_type = value;
                             });
                           },
                         ),
                         CustomRadioButtonForPets(
                           value: 'Cat',
                           imageURL: 'assets/images/cat.png',
-                          groupValue: _petKind,
+                          groupValue: _animal_type,
                           onChanged: (value) {
                             setState(() {
-                              _petKind = value;
+                              _animal_type = value;
                             });
                           },
                         ),
                         CustomRadioButtonForPets(
-                          value: 'bird',
+                          value: 'Bird',
                           imageURL: 'assets/images/bird.png',
-                          groupValue: _petKind,
+                          groupValue: _animal_type,
                           onChanged: (value) {
                             setState(() {
-                              _petKind = value;
+                              _animal_type = value;
                             });
                           },
                         ),
                         CustomRadioButtonForPets(
                           value: 'Hams',
                           imageURL: 'assets/images/hams.png',
-                          groupValue: _petKind,
+                          groupValue: _animal_type,
                           onChanged: (value) {
                             setState(() {
-                              _petKind = value;
+                              _animal_type = value;
                             });
                           },
                         ),
                         CustomRadioButtonForPets(
                           value: 'Fish',
                           imageURL: 'assets/images/fish.png',
-                          groupValue: _petKind,
+                          groupValue: _animal_type,
                           onChanged: (value) {
                             setState(() {
-                              _petKind = value;
+                              _animal_type = value;
                             });
                           },
                         ),
@@ -220,7 +224,6 @@ class _FormRouteState extends State<FormRoute> {
                     onPressed: () async {
                       _selectedImage = await pickImages();
                       if (_selectedImage == null) return;
-                      Theme.of(context).platform;
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -228,7 +231,8 @@ class _FormRouteState extends State<FormRoute> {
                             title: Text('Selected Image'),
                             content: Container(
                               width: double.maxFinite,
-                              child: getImageAlertDialog(_selectedImage!.path),
+                              child: getImagePlatform(
+                                  _selectedImage!.path, context),
                             ),
                             actions: [
                               TextButton(
@@ -241,7 +245,8 @@ class _FormRouteState extends State<FormRoute> {
                                 child: Text('Retry'),
                                 onPressed: () async {
                                   Navigator.of(context).pop();
-                                  (_buttonKey.currentWidget as ElevatedButton).onPressed!();
+                                  (_buttonKey.currentWidget as ElevatedButton)
+                                      .onPressed!();
                                 },
                               ),
                             ],
@@ -259,7 +264,6 @@ class _FormRouteState extends State<FormRoute> {
                     ),
                   ),
                 ),
-
 
                 /// description
                 SizedBox(height: 16.0),
@@ -288,6 +292,36 @@ class _FormRouteState extends State<FormRoute> {
                               color: Theme.of(context).primaryColor))),
                 ),
 
+                /// contact
+                SizedBox(height: 16.0),
+                Text("Add your contact",
+                    style: Theme.of(context).textTheme.bodyLarge),
+                SizedBox(height: 8.0),
+                TextFormField(
+                  maxLength: 10,
+                  maxLines: 1,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  controller: _contactController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty || value.length != 10) {
+                      return 'Please fill in your contact info.';
+                    }
+                    setState(() {
+                      _contactController.text = value;
+                    });
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                      hintText: '05xxx',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor))),
+                ),
+
                 /// buttons
                 SizedBox(height: 16.0),
                 Container(
@@ -295,7 +329,6 @@ class _FormRouteState extends State<FormRoute> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context);
@@ -304,14 +337,44 @@ class _FormRouteState extends State<FormRoute> {
                           style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.all(32.0))),
                       ElevatedButton(
-                        // TODO: add post logic
-                          onPressed: () {
+                          // TODO: add post logic
+                          onPressed: () async {
                             if (_formKey.currentState!.validate() &&
                                 _locationData['latitude'] != 0 &&
                                 _locationData['longitude'] != 0 &&
                                 _selectedImage != null) {
                               _formKey.currentState!.save();
+
                               // The form is valid, proceed with POST logic
+                              var res = await Provider.of<PetProvider>(context,
+                                      listen: false)
+                                  .addPet(Pet(
+                                user_id: Provider.of<UserProvider>(context, listen: false).user!.id,
+                                title: _titleController.text,
+                                image: _selectedImage!,
+                                city: _city,
+                                lat: _lat,
+                                lng: _lng,
+                                animal_type: _animal_type,
+                                adopted: false,
+                                description: _descriptionController.text,
+                                contact: _contactController.text,
+                                urgency: _urgentValue,
+                              ));
+                              if (res) {
+                                await ScaffoldMessenger.of(context)
+                                    .showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Your pet has been added successfully')),
+                                );
+                                Navigator.pop(context);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('ERROR: try again')),
+                                );
+                              }
                             }
                           },
                           child: Text("Post"),
@@ -320,33 +383,11 @@ class _FormRouteState extends State<FormRoute> {
                     ],
                   ),
                 ),
-
-                /// aux - testing
-                SizedBox(height: 96.0),
-                Text(_titleController.text,
-                    style: TextStyle(color: Colors.red)),
-                Text(_petKind, style: TextStyle(color: Colors.red)),
-                Text(_urgentValue, style: TextStyle(color: Colors.red)),
-                Text(_lat.toString(), style: TextStyle(color: Colors.red)),
-                Text(_lng.toString(), style: TextStyle(color: Colors.red)),
-                Text(_descriptionController.text,
-                    style: TextStyle(color: Colors.red)),
-                Text(_selectedImage?.path ?? "",
-                    style: TextStyle(color: Colors.red))
               ],
             ),
           ),
         ),
       ),
     );
-  }
-
-  Image getImageAlertDialog(String path) {
-    TargetPlatform platform = Theme.of(context).platform;
-    if (platform == TargetPlatform.android || platform == TargetPlatform.iOS) {
-      return Image.file(File(path));
-    } else {
-      return Image.network(path);
-    }
   }
 }

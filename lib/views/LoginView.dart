@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:swe463_project/models/UserProvider.dart';
 import 'package:swe463_project/views/MainView.dart';
 import '../models/ThemeProvider.dart';
 import './SignUpView.dart';
@@ -42,6 +43,7 @@ class _LoginViewState extends State<LoginView> {
       if (response.statusCode == 201) {
         // successful response
         final jsonRes = jsonDecode(response.body);
+        Provider.of<UserProvider>(context, listen: false).setUser(id: jsonRes['data']);
         print('Login successful: $jsonRes');
         return true;
       } else {

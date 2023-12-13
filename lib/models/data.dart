@@ -2,71 +2,87 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-enum AnimalType { cat, dog, fish, bird, other }
+import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:swe463_project/utilities/encode_decode.dart';
 
-enum Urgency { nonUrgent, Urgent, veryUrgent }
+List<String> animalType = ['cat', 'dog', 'fish', 'bird', 'other'];
 
-extension UrgencyExtension on Urgency {
-  String get stringValue {
-    switch (this) {
-      case Urgency.nonUrgent:
-        return "Non Urgent";
-      case Urgency.Urgent:
-        return "Urgent";
-      case Urgency.veryUrgent:
-        return "Very Urgent";
-    }
-  }
-}
+List<String> urgency = ['non urgent', 'urgent', 'very urgent'];
 
 class Pet {
-  final String name;
-  final String image;
-  final String location;
-  final String id;
-  late final bool favorite;
-  final AnimalType animaltype;
-
+  late final String? id;
+  late final String user_id;
+  final String title;
+  XFile image;
+  String? imageEncoded;
+  final String city;
+  final double lat;
+  final double lng;
+  final String animal_type;
   final bool adopted;
+  final String description;
+  final String contact;
+  final String urgency;
 
-  final String describtion;
-
-  final Urgency urgency;
-
-  Pet(
-      {required this.adopted,
-      required this.animaltype,
-      required this.describtion,
-      required this.name,
-      required this.image,
-      required this.location,
-      required this.id,
-      required this.favorite,
-      required this.urgency});
-
-  // user clicks the favorite button
-  void toggleFavorite(String id) {
-    final petIndex = pets.indexWhere((pet) => pet.id == id);
-    pets[petIndex].favorite = !pets[petIndex].favorite;
-  }
-
-// make a provider class for pets using change notifier
+  Pet({
+    this.id,
+    required this.user_id,
+    required this.title,
+    required this.image,
+    required this.city,
+    required this.lat,
+    required this.lng,
+    required this.animal_type,
+    required this.adopted,
+    required this.description,
+    required this.contact,
+    required this.urgency,
+  });
 
   // fromJson() method to convert JSON data to a Pet object
-  factory Pet.fromJson(Map<String, dynamic> json) {
+  factory Pet.fromJSON(Map<String, dynamic> json) {
     return Pet(
-        adopted: json['adopted'],
-        animaltype: AnimalType.values[json['animaltype']],
-        describtion: json['describtion'],
-        name: json['name'],
-        image: json['image'],
-        location: json['location'],
-        id: json['_id'],
-        favorite: json['favorite'],
-        urgency: Urgency.values[json['urgency']]);
+      id: json['id'],
+      user_id: json['user_id'],
+      title: json['title'],
+      image: json['image'],
+      city: json['city'],
+      lat: json['lat'],
+      lng: json['lng'],
+      animal_type: json['animal_type'],
+      adopted: json['adopted'],
+      description: json['description'],
+      contact: json['contact'],
+      urgency: json['urgency'],
+    );
+  }
+
+  Future<Map<String, dynamic>> toJson() async {
+    return {
+      'id': id,
+      'user_id': user_id,
+      'title': title,
+      'image': await encodeImage(image),
+      'city': city,
+      'lat': lat,
+      'lng': lng,
+      'animal_type': animal_type,
+      'adopted': adopted,
+      'description': description,
+      'contact': contact,
+      'urgency': urgency,
+    };
   }
 }
 
+// user clicks the favorite button
+// void toggleFavorite(String id) {
+//   final petIndex = pets.indexWhere((pet) => pet.id == id);
+//   pets[petIndex].favorite = !pets[petIndex].favorite;
+// }
+
+// make a provider class for pets using change notifier
 // make a pet provider class
 class PetProvider extends ChangeNotifier {
   List<Pet> _pets = [];
@@ -84,17 +100,20 @@ class PetProvider extends ChangeNotifier {
       print(pets);
       // make a list of pets as a Pet object
       final List<Pet> loadedPets = [];
-      pets.forEach((pet) {
-        loadedPets.add(Pet(
-            adopted: pet['adopted'],
-            animaltype: AnimalType.values[pet['animaltype']],
-            describtion: pet['describtion'],
-            name: pet['name'],
-            image: pet['image'],
-            location: pet['location'],
-            id: pet['id'],
-            favorite: pet['favorite'],
-            urgency: Urgency.values[pet['urgency']]
+      pets.forEach((pet) async {
+        _pets.add(Pet(
+          id: pet['id'],
+          user_id: pet['user_id'],
+          title: pet['title'],
+          image: await decodeImage(pet['image']),
+          city: pet['city'],
+          lat: pet['lat'],
+          lng: pet['lng'],
+          animal_type: pet['animal_type'],
+          adopted: pet['adopted'],
+          description: pet['description'],
+          contact: pet['contact'],
+          urgency: pet['urgency'],
         ));
       });
       print(loadedPets);
@@ -103,86 +122,59 @@ class PetProvider extends ChangeNotifier {
       throw (error);
     }
   }
-}
 
-Future<List<Pet>> getAllPets() async {
-  try {
-    var response = await http.get(
-        Uri.parse(
-          'http://localhost:3300/pets',
-        ),
-        headers: {'Content-Type': 'application/json'});
+  Future<bool> addPet(Pet pet) async {
+    // pet.imageEncoded = await encodeImage(pet.image);
+    print("-----------------");
+    // print(pet);
+    print("-----------------");
 
-    if (response.statusCode == 200) {
-      var petsJson = jsonDecode(response.body);
-      return petsJson.map((pet) => Pet.fromJson(pet)).toList();
-    } else {
-      throw Exception('Failed to load pets');
+    // print(await jsonEncode(await pet.toJson()));
+    print("-----------------");
+
+    final url = Uri.parse('http://localhost:3300/pets');
+    try {
+      final response = await http.post(url,
+          body:  await jsonEncode({'pet': await pet.toJson(), 'uid': pet.user_id}),
+          headers: {'Content-Type': 'application/json'});
+      print('RESP: $response');
+      if (response.statusCode == 201) return true;
+      return false;
+    } catch (error) {
+      print("err: $error");
+      throw (error);
     }
-  } catch (e) {
-    throw Exception('Error: $e');
+  }
+
+  Future<bool> toggleFavourite(Pet pet) async {
+    // FIXME: add endpoint in backend
+    // FIXME: fix code
+    final url = Uri.parse('http://10.0.2.2:3300/pets/');
+    try {
+      final response = await http.put(url,
+          body: jsonEncode(pet), headers: {'Content-Type': 'application/json'});
+      if (response.statusCode == 201) return true;
+      return false;
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<bool> toggleAdopted(Pet pet) async {
+    // FIXME: add endpoint in backend
+    // FIXME: fix code
+    final url = Uri.parse('http://10.0.2.2:3300/pets/');
+    try {
+      final response = await http.put(url,
+          body: jsonEncode(pet), headers: {'Content-Type': 'application/json'});
+      if (response.statusCode == 201) return true;
+      return false;
+    } catch (error) {
+      throw (error);
+    }
   }
 }
 
+
 final List<Pet> pets = [
-  Pet(
-      name: 'Fluffy',
-      image: './assets/images/sad dog.png',
-      location: 'Dammam 4km',
-      favorite: true,
-      id: '1',
-      adopted: false,
-      animaltype: AnimalType.dog,
-      describtion: "fluffy need help call me on -xxx",
-      urgency: Urgency.nonUrgent),
-  Pet(
-      name: 'Whiskers',
-      image: './assets/images/street hamster .png',
-      location: 'Riyadh 2km',
-      favorite: false,
-      id: '2',
-      adopted: false,
-      animaltype: AnimalType.other,
-      describtion: "Hamster need help call me on -xxx",
-      urgency: Urgency.nonUrgent),
-  Pet(
-      name: 'Spot',
-      image: './assets/images/street cat.png',
-      location: 'Jeddah 3km',
-      favorite: false,
-      id: '3',
-      adopted: false,
-      animaltype: AnimalType.cat,
-      describtion: "Spot need help call me on -xxx",
-      urgency: Urgency.nonUrgent),
-  Pet(
-      name: 'Mittens',
-      image: './assets/images/street cat.png',
-      location: 'Khobar 1km',
-      favorite: false,
-      id: '4',
-      adopted: true,
-      animaltype: AnimalType.cat,
-      describtion: "mittens need help call me on -xxx",
-      urgency: Urgency.nonUrgent),
-  Pet(
-      name: 'Fish need help',
-      image: './assets/images/injured fish.png',
-      location: 'Dammam 4km',
-      favorite: false,
-      id: '5',
-      adopted: false,
-      animaltype: AnimalType.fish,
-      describtion: "This fish need help call me on -xxx",
-      urgency: Urgency.nonUrgent),
-  Pet(
-      name: 'حالة انسانية طير في شمال الرياض',
-      image: './assets/images/injured bird.png',
-      location: 'Riyadh 2km',
-      favorite: false,
-      id: '6',
-      adopted: false,
-      animaltype: AnimalType.dog,
-      describtion: "Spike need help call me on -xxx",
-      urgency: Urgency.nonUrgent),
 ];

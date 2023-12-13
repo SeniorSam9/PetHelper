@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:swe463_project/utilities/getImagePlatform.dart';
 
 import '../models/data.dart';
 
@@ -12,10 +13,11 @@ class _ProfilePageState extends State<ProfilePage> {
   List<Pet> adoptedPets = [];
   List<Pet> reportedPets = [];
   @override
-   void initState(){
-      adoptedPets = pets.where((pet) => pet.adopted).toList() ;
-      reportedPets = pets.where((pet) => !pet.adopted).toList() ;
-      super.initState() ; }
+  void initState() {
+    adoptedPets = pets.where((pet) => pet.adopted).toList();
+    reportedPets = pets.where((pet) => !pet.adopted).toList();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,16 +97,14 @@ class _ProfilePageState extends State<ProfilePage> {
               width: 100,
               height: 90,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image(
-                  width: 90,
-                  height: 80,
-                  fit: BoxFit.cover,
-                  image: AssetImage(pet.image),
-                ),
-              ),
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    width: 90,
+                    height: 80,
+                    child: getImagePlatform(pet.image.path, context),
+                    //   TODO: ADD 'fit: BoxFit.cover' IMPORTANT
+                  )),
             ),
-
             SizedBox(width: 18),
             Expanded(
               flex: 2,
@@ -112,13 +112,14 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    pet.name,
+                    pet.title,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                   Row(
                     children: [
                       Icon(Icons.location_city),
-                      Text(pet.location, style: Theme.of(context).textTheme.labelSmall),
+                      Text(pet.city,
+                          style: Theme.of(context).textTheme.labelSmall),
                     ],
                   ),
                 ],
@@ -136,7 +137,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       Icon(
                         CupertinoIcons.exclamationmark,
                       ),
-                      Text(pet.urgency.stringValue, style: Theme.of(context).textTheme.labelMedium,),
+                      Text(
+                        pet.urgency,
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
                     ],
                   ),
                   SizedBox(height: 6),
@@ -154,7 +158,6 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
@@ -169,7 +172,8 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => tabBar.preferredSize.height;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: tabBar,

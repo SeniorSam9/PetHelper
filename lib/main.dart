@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:swe463_project/models/ThemeProvider.dart';
+import 'package:swe463_project/models/UserProvider.dart';
 import 'package:swe463_project/models/data.dart';
 import 'views/LoginView.dart';
 
@@ -13,6 +14,7 @@ void main() {
       ChangeNotifierProvider<ThemeProvider>(
         create: (context) => ThemeProvider(),
       ),
+      ChangeNotifierProvider<UserProvider>(create: (context) => UserProvider())
     ],
     child: const MyApp(),
   ));

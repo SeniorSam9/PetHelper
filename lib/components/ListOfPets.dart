@@ -27,10 +27,11 @@ class _ListOfPetsState extends State<ListOfPets> {
         crossAxisSpacing: 8.0,
         mainAxisSpacing: 8.0,
       ),
-      itemCount: pets.length,
+      // itemCount: pets.length,
+      itemCount: 6,
       itemBuilder: (context, index) {
-        var pet = pets[index];
-        return Card(
+        // var pet = pets[index];
+        return Card(child: Text("Something"),
             //... rest of your card code
             );
       },

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../routes/FormRoute.dart';
 import '../views/LoginView.dart';
 
 import '../pages/HomePage.dart';
@@ -24,6 +26,20 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // floatingActionButton appear on home page only
+      floatingActionButton: _currentIndex == 0
+          ? FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FormRoute(),
+                  ),
+                );
+              },
+            )
+          : null,
       appBar: AppBar(
         title: Text('Pets Helper'),
         actions: [
