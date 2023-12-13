@@ -151,6 +151,7 @@ class PetProvider extends ChangeNotifier {
     // FIXME: fix code
     final url = Uri.parse('http://10.0.2.2:3300/pets/');
     try {
+
       final response = await http.put(url,
           body: jsonEncode(pet), headers: {'Content-Type': 'application/json'});
       if (response.statusCode == 201) return true;
@@ -169,6 +170,7 @@ class PetProvider extends ChangeNotifier {
           body: jsonEncode(pet), headers: {'Content-Type': 'application/json'});
       if (response.statusCode == 201) return true;
       return false;
+
     } catch (error) {
       throw (error);
     }
