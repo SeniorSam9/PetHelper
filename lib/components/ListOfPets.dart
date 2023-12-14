@@ -13,7 +13,7 @@ class _ListOfPetsState extends State<ListOfPets> {
   void initState() {
     super.initState();
     // Fetch pets data when the widget is initialized
-    Provider.of<PetProvider>(context, listen: false).fetchAndSetPets();
+      Provider.of<PetProvider>(context, listen: false).fetchAndSetPets();
   }
 
   @override

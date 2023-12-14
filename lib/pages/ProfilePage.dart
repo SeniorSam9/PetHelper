@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swe463_project/utilities/getImagePlatform.dart';
 
 import '../models/data.dart';
@@ -10,17 +11,22 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  List<Pet> adoptedPets = [];
-  List<Pet> reportedPets = [];
+
+  // List<Pet> adoptedPets = [];
+  // List<Pet> reportedPets = [];
   @override
-  void initState() {
-    adoptedPets = pets.where((pet) => pet.adopted).toList();
-    reportedPets = pets.where((pet) => !pet.adopted).toList();
-    super.initState();
-  }
+  // void initState() {
+  //   adoptedPets = pets.where((pet) => pet.adopted).toList();
+  //   reportedPets = pets.where((pet) => !pet.adopted).toList();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final petProvider = Provider.of<PetProvider>(context);
+    final adoptedPets = petProvider.adoptedPets;
+    final reportedPets = petProvider.reportedPets;
+
     return Scaffold(
       body: DefaultTabController(
         length: 2,
@@ -88,74 +94,80 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget buildCard(Pet pet) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 6, 2, 6),
-        child: Row(
-          children: [
-            Container(
-              width: 100,
-              height: 90,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    width: 90,
-                    height: 80,
-                    child: getImagePlatform(pet.image.path, context),
-                    //   TODO: ADD 'fit: BoxFit.cover' IMPORTANT
-                  )),
-            ),
-            SizedBox(width: 18),
-            Expanded(
-              flex: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    pet.title,
-                    style: Theme.of(context).textTheme.labelMedium,
-                  ),
-                  Row(
-                    children: [
-                      Icon(Icons.location_city),
-                      Text(pet.city,
-                          style: Theme.of(context).textTheme.labelSmall),
-                    ],
-                  ),
-                ],
+    return Consumer<PetProvider>(
+      builder: (context,petProvider, _ ){
+
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 6, 2, 6),
+          child: Row(
+            children: [
+              Container(
+                width: 100,
+                height: 90,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      width: 90,
+                      height: 80,
+                      child: getImagePlatform(pet.image.path, context),
+                      //   TODO: ADD 'fit: BoxFit.cover' IMPORTANT
+                    )),
               ),
-            ),
-            SizedBox(width: 8),
-            Expanded(
-              flex: 0,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        CupertinoIcons.exclamationmark,
-                      ),
-                      Text(
-                        pet.urgency,
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 6),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      pet.adopted ? "Adopted" : "Reported",
+              SizedBox(width: 18),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      pet.title,
+                      style: Theme.of(context).textTheme.labelMedium,
                     ),
-                  ),
-                ],
+                    Row(
+                      children: [
+                        Icon(Icons.location_city),
+                        Text(pet.city,
+                            style: Theme.of(context).textTheme.labelSmall),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              SizedBox(width: 8),
+              Expanded(
+                flex: 0,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          CupertinoIcons.exclamationmark,
+                        ),
+                        Text(
+                          pet.urgency,
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 6),
+                    ElevatedButton(
+                      onPressed: () {
+                        petProvider.toggleAdopted(pet);
+                      },
+                      child: Text(
+                        pet.adopted ? "Adopted" : "Reported",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      ) ; }
     );
   }
 }

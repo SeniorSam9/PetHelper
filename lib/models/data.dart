@@ -20,7 +20,7 @@ class Pet {
   final double lat;
   final double lng;
   final String animal_type;
-  final bool adopted;
+  late final bool adopted;
   final String description;
   final String contact;
   final String urgency;
@@ -90,6 +90,13 @@ class PetProvider extends ChangeNotifier {
   List<Pet> get pets {
     return [..._pets];
   }
+  List<Pet> get adoptedPets{
+    return _pets.where((pet) => pet.adopted).toList() ;
+  }
+  List<Pet> get reportedPets{
+    return _pets.where((pet) => !pet.adopted).toList() ;
+  }
+
 
   Future<void> fetchAndSetPets() async {
     final url = Uri.parse('http://10.0.2.2:3300/pets');
@@ -97,9 +104,10 @@ class PetProvider extends ChangeNotifier {
       final response = await http.get(url);
       final extractedData = json.decode(response.body);
       final pets = extractedData['data'];
-      print(pets);
+
       // make a list of pets as a Pet object
-      final List<Pet> loadedPets = [];
+      final List<Pet> loadedPets = []; // This is not needed right?
+
       pets.forEach((pet) async {
         _pets.add(Pet(
           id: pet['id'],
@@ -116,8 +124,9 @@ class PetProvider extends ChangeNotifier {
           urgency: pet['urgency'],
         ));
       });
-      print(loadedPets);
-      _pets = loadedPets;
+      notifyListeners() ;
+
+     // _pets = loadedPets;
     } catch (error) {
       throw (error);
     }
@@ -149,11 +158,12 @@ class PetProvider extends ChangeNotifier {
   Future<bool> toggleFavourite(Pet pet) async {
     // FIXME: add endpoint in backend
     // FIXME: fix code
-    final url = Uri.parse('http://10.0.2.2:3300/pets/');
+    final url = Uri.parse('http://10.0.2.2:3300/pets/${pet.id}');
     try {
 
       final response = await http.put(url,
-          body: jsonEncode(pet), headers: {'Content-Type': 'application/json'});
+          body: jsonEncode(pet),
+          headers: {'Content-Type': 'application/json'});
       if (response.statusCode == 201) return true;
       return false;
     } catch (error) {
@@ -162,13 +172,24 @@ class PetProvider extends ChangeNotifier {
   }
 
   Future<bool> toggleAdopted(Pet pet) async {
-    // FIXME: add endpoint in backend
-    // FIXME: fix code
-    final url = Uri.parse('http://10.0.2.2:3300/pets/');
+    // FIXME: add endpoint in backend /// Done.. did not change them
+    // FIXME: fix code // Done
+    final url = Uri.parse('http://10.0.2.2:3300/pets/${pet.id}');
     try {
+
       final response = await http.put(url,
-          body: jsonEncode(pet), headers: {'Content-Type': 'application/json'});
-      if (response.statusCode == 201) return true;
+          body: jsonEncode({
+            'uid': pet.user_id,
+            'petId': pet.id,
+            'pet': pet,
+          }),
+          headers: {'Content-Type': 'application/json'});
+      if (response.statusCode == 201) {
+
+        pet.adopted = !pet.adopted ;
+        notifyListeners();
+        return true;
+      }
       return false;
 
     } catch (error) {
