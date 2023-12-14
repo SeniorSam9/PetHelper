@@ -162,7 +162,7 @@ class PetProvider extends ChangeNotifier {
   Future<bool> toggleFavourite(Pet pet) async {
     // FIXME: add endpoint in backend
     // FIXME: fix code
-    final url = Uri.parse('http://10.0.2.2:3300/pets/${pet.id}');
+    final url = Uri.parse('http://localhost:3300/pets');
     try {
 
       final response = await http.put(url,
@@ -178,7 +178,7 @@ class PetProvider extends ChangeNotifier {
   Future<bool> toggleAdopted(Pet pet) async {
     // FIXME: add endpoint in backend /// Done.. did not change them
     // FIXME: fix code // Done
-    final url = Uri.parse('http://10.0.2.2:3300/pets/');
+    final url = Uri.parse('http://localhost:3300/pets');
     try {
 
       final response = await http.put(url,

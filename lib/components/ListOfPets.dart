@@ -14,12 +14,11 @@ class _ListOfPetsState extends State<ListOfPets> {
   void initState() {
     super.initState();
     // Fetch pets data when the widget is initialized
-      Provider.of<PetProvider>(context, listen: false).fetchAndSetPets();
+    Provider.of<PetProvider>(context, listen: false).fetchAndSetPets();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return GridView.builder(
       padding: EdgeInsets.all(8),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -27,12 +26,12 @@ class _ListOfPetsState extends State<ListOfPets> {
         crossAxisSpacing: 8.0,
         mainAxisSpacing: 8.0,
       ),
-      // itemCount: pets.length,
-      itemCount: 6,
+      itemCount: 6, // Replace with the number of pets or use pets.length
       itemBuilder: (context, index) {
-        // var pet = pets[index];
-        return PetsPage();
-
+        // Replace the Card widget with your desired widget or pet data
+        return Card(
+          child: Text("Something"),
+        );
       },
     );
   }
