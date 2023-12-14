@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:swe463_project/models/UserProvider.dart';
 import 'package:swe463_project/views/MainView.dart';
 import '../models/ThemeProvider.dart';
+import '../models/data.dart';
 import './SignUpView.dart';
 import 'package:http/http.dart' as http;
 
@@ -220,6 +221,8 @@ class _LoginViewState extends State<LoginView> {
                           const SnackBar(content: Text('Loading...')),
                         );
                         if (await submitLoginForm()) {
+                          await Provider.of<PetProvider>(context, listen: false).fetchAndSetPets();
+
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (context) => MainView()),

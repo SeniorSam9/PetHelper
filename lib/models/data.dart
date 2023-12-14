@@ -99,16 +99,18 @@ class PetProvider extends ChangeNotifier {
 
 
   Future<void> fetchAndSetPets() async {
-    final url = Uri.parse('http://10.0.2.2:3300/pets');
+    final url = Uri.parse('http://localhost:3300/pets');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body);
-      final pets = extractedData['data'];
+      final loadedPets = extractedData['data'];
+      print("PETS GETTER");
+      print(loadedPets);
 
       // make a list of pets as a Pet object
-      final List<Pet> loadedPets = []; // This is not needed right?
+      // final List<Pet> loadedPets = []; // This is not needed right?
 
-      pets.forEach((pet) async {
+      loadedPets.forEach((pet) async {
         _pets.add(Pet(
           id: pet['id'],
           user_id: pet['user_id'],
@@ -123,7 +125,9 @@ class PetProvider extends ChangeNotifier {
           contact: pet['contact'],
           urgency: pet['urgency'],
         ));
-      });
+      }
+      );
+      // pets.forEach((element) {print(element.toJson().toString());});
       notifyListeners() ;
 
      // _pets = loadedPets;

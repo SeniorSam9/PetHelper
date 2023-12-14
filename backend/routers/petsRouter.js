@@ -13,15 +13,42 @@ export const petsRouter = express.Router();
 
 // get all pets
 petsRouter.get("/", async (req, res) => {
-    const pets = [];
-    // FIXME: get pets from db
-    const ref = collection(db, "pets");
-    const snapshot = await getDocs(ref);
-    snapshot.forEach((doc) => {
-        pets.push({ ...doc.data(), id: doc.id });
-    });
-    console.log(pets);
-    res.json({ status: true, data: pets });
+    try {
+        const userCollectionRef = collection(db, "User");
+        const pets = [];
+
+        const userSnapshot = await getDocs(userCollectionRef);
+        const promises = userSnapshot.docs.map(async (userDoc) => {
+            const petsCollectionRef = collection(userDoc.ref, "Pets");
+            const petsSnapshot = await getDocs(petsCollectionRef);
+
+            petsSnapshot.forEach((petDoc) => {
+                pets.push({ ...petDoc.data(), id: petDoc.id });
+                console.log("PET WITH INDEX", petDoc.data());
+            });
+        });
+
+        await Promise.all(promises);
+
+        console.log("pets calling");
+        console.log(pets);
+        res.json({ status: true, data: pets });
+
+        // res.json({ status: true, data: pets });
+        // const usersSnapshot = db.collection("User").get();
+        // for (const userDoc of usersSnapshot.docs) {
+        //     const userPetsSnapshot = await userDoc.ref.collection("Pets").get();
+
+        //     userPetsSnapshot.forEach((petDoc) => {
+        //         pets.push({ ...petDoc.data(), id: petDoc.id });
+        //     });
+        // }
+        // console.log("pets calling");
+        // console.log(pets);
+    } catch (error) {
+        console.error("Error retrieving pets:", error);
+        res.status(500).json({ error: "Failed to retrieve pets." });
+    }
 });
 // add pet
 petsRouter.post("/", async (req, res) => {
