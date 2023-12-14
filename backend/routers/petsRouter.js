@@ -51,6 +51,7 @@ petsRouter.get("/", async (req, res) => {
     }
 });
 // add pet
+
 petsRouter.post("/", async (req, res) => {
     const { uid, pet } = req.body;
     console.log(uid, pet);

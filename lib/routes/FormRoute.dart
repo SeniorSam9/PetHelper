@@ -235,20 +235,21 @@ class _FormRouteState extends State<FormRoute> {
                                   _selectedImage!.path, context),
                             ),
                             actions: [
+                          TextButton(
+                          child: Text('Retry'),
+                          onPressed: () async {
+                          Navigator.of(context).pop();
+                          (_buttonKey.currentWidget as ElevatedButton)
+                              .onPressed!();
+                          },
+                          ),
                               TextButton(
                                 child: Text('Confirm'),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
                               ),
-                              TextButton(
-                                child: Text('Retry'),
-                                onPressed: () async {
-                                  Navigator.of(context).pop();
-                                  (_buttonKey.currentWidget as ElevatedButton)
-                                      .onPressed!();
-                                },
-                              ),
+
                             ],
                           );
                         },

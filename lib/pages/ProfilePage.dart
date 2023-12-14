@@ -12,15 +12,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
 
-  // List<Pet> adoptedPets = [];
-  // List<Pet> reportedPets = [];
-  @override
-  // void initState() {
-  //   adoptedPets = pets.where((pet) => pet.adopted).toList();
-  //   reportedPets = pets.where((pet) => !pet.adopted).toList();
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     final petProvider = Provider.of<PetProvider>(context);
@@ -112,6 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 80,
                       child: getImagePlatform(pet.image.path, context),
                       //   TODO: ADD 'fit: BoxFit.cover' IMPORTANT
+
                     )),
               ),
               SizedBox(width: 18),
@@ -156,9 +148,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     ElevatedButton(
                       onPressed: () {
                         petProvider.toggleAdopted(pet);
+
+                        setState(() {
+
+                        });
                       },
                       child: Text(
-                        pet.adopted ? "Adopted" : "Reported",
+                        pet.adopted ? "Reported" : "Adopted",
                       ),
                     ),
                   ],
