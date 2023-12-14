@@ -112,6 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 80,
                       child: getImagePlatform(pet.image.path, context),
                       //   TODO: ADD 'fit: BoxFit.cover' IMPORTANT
+
                     )),
               ),
               SizedBox(width: 18),
