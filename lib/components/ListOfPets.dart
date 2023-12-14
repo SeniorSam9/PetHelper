@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:swe463_project/pages/PetsPage.dart';
-import '../models/data.dart';
-import '../routes/CertainPetRoute.dart';
 
 class ListOfPets extends StatefulWidget {
   @override
@@ -13,8 +9,6 @@ class _ListOfPetsState extends State<ListOfPets> {
   @override
   void initState() {
     super.initState();
-    // Fetch pets data when the widget is initialized
-    Provider.of<PetProvider>(context, listen: false).fetchAndSetPets();
   }
 
   @override

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:swe463_project/utilities/getImagePlatform.dart';
@@ -136,7 +135,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     Row(
                       children: [
                         Icon(
-                          CupertinoIcons.exclamationmark,
+                          pet.urgency=="Not urgent"? Icons.signal_cellular_alt_1_bar:
+                          pet.urgency=="Urgent"? Icons.signal_cellular_alt_2_bar:
+                          Icons.signal_cellular_alt,color: Colors.red,
                         ),
                         Text(
                           pet.urgency,

@@ -3,12 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:swe463_project/utilities/encode_decode.dart';
-
-List<String> animalType = ['cat', 'dog', 'fish', 'bird', 'other'];
-
-List<String> urgency = ['non urgent', 'urgent', 'very urgent'];
 
 class Pet {
   late final String? id;
@@ -76,27 +71,20 @@ class Pet {
   }
 }
 
-// user clicks the favorite button
-// void toggleFavorite(String id) {
-//   final petIndex = pets.indexWhere((pet) => pet.id == id);
-//   pets[petIndex].favorite = !pets[petIndex].favorite;
-// }
-
-// make a provider class for pets using change notifier
-// make a pet provider class
 class PetProvider extends ChangeNotifier {
   List<Pet> _pets = [];
 
   List<Pet> get pets {
     return [..._pets];
   }
-  List<Pet> get adoptedPets{
-    return _pets.where((pet) => pet.adopted).toList() ;
-  }
-  List<Pet> get reportedPets{
-    return _pets.where((pet) => !pet.adopted).toList() ;
+
+  List<Pet> get adoptedPets {
+    return _pets.where((pet) => pet.adopted).toList();
   }
 
+  List<Pet> get reportedPets {
+    return _pets.where((pet) => !pet.adopted).toList();
+  }
 
   Future<void> fetchAndSetPets() async {
     final url = Uri.parse('http://localhost:3300/pets');
@@ -104,11 +92,6 @@ class PetProvider extends ChangeNotifier {
       final response = await http.get(url);
       final extractedData = json.decode(response.body);
       final loadedPets = extractedData['data'];
-      print("PETS GETTER");
-      print(loadedPets);
-
-      // make a list of pets as a Pet object
-      // final List<Pet> loadedPets = []; // This is not needed right?
 
       loadedPets.forEach((pet) async {
         _pets.add(Pet(
@@ -125,33 +108,21 @@ class PetProvider extends ChangeNotifier {
           contact: pet['contact'],
           urgency: pet['urgency'],
         ));
-      }
-      );
-      // pets.forEach((element) {print(element.toJson().toString());});
-      notifyListeners() ;
-
-     // _pets = loadedPets;
+      });
+      notifyListeners();
     } catch (error) {
       throw (error);
     }
   }
 
   Future<bool> addPet(Pet pet) async {
-    // pet.imageEncoded = await encodeImage(pet.image);
-    print("-----------------");
-    // print(pet);
-    print("-----------------");
-
-    // print(await jsonEncode(await pet.toJson()));
-    print("-----------------");
-
     final url = Uri.parse('http://localhost:3300/pets');
     try {
       final response = await http.post(url,
-          body:  await jsonEncode({'pet': await pet.toJson(), 'uid': pet.user_id}),
+          body:
+              await jsonEncode({'pet': await pet.toJson(), 'uid': pet.user_id}),
           headers: {'Content-Type': 'application/json'});
-      print('RESP: $response');
-      if (response.statusCode == 201) return true;
+      if (response.statusCode == 200) return true;
       return false;
     } catch (error) {
       print("err: $error");
@@ -164,11 +135,9 @@ class PetProvider extends ChangeNotifier {
     // FIXME: fix code
     final url = Uri.parse('http://localhost:3300/pets');
     try {
-
       final response = await http.put(url,
-          body: jsonEncode(pet),
-          headers: {'Content-Type': 'application/json'});
-      if (response.statusCode == 201) return true;
+          body: jsonEncode(pet), headers: {'Content-Type': 'application/json'});
+      if (response.statusCode == 200) return true;
       return false;
     } catch (error) {
       throw (error);
@@ -180,7 +149,6 @@ class PetProvider extends ChangeNotifier {
     // FIXME: fix code // Done
     final url = Uri.parse('http://localhost:3300/pets');
     try {
-
       final response = await http.put(url,
           body: jsonEncode({
             'uid': pet.user_id,
@@ -188,20 +156,16 @@ class PetProvider extends ChangeNotifier {
             'pet': pet,
           }),
           headers: {'Content-Type': 'application/json'});
-      if (response.statusCode == 201) {
 
-        pet.adopted = !pet.adopted ;
+      if (response.statusCode == 200) {
+        pet.adopted = !pet.adopted;
+
         notifyListeners();
         return true;
       }
       return false;
-
     } catch (error) {
       throw (error);
     }
   }
 }
-
-
-final List<Pet> pets = [
-];

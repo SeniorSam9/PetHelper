@@ -12,8 +12,10 @@ class _HomePageState extends State<HomePage> {
     return Container(
       width: double.maxFinite,
       height: double.maxFinite,
-      child: Center(
-        child: Expanded(child: ListOfPets()),
+      child: Column(
+        children: [
+          Expanded(child: ListOfPets()),
+        ],
       ),
     );
   }
