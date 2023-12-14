@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:swe463_project/pages/PetsPage.dart';
 import '../models/data.dart';
 import '../routes/CertainPetRoute.dart';
 
@@ -19,7 +20,6 @@ class _ListOfPetsState extends State<ListOfPets> {
   @override
   Widget build(BuildContext context) {
 
-
     return GridView.builder(
       padding: EdgeInsets.all(8),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -31,9 +31,8 @@ class _ListOfPetsState extends State<ListOfPets> {
       itemCount: 6,
       itemBuilder: (context, index) {
         // var pet = pets[index];
-        return Card(child: Text("Something"),
-            //... rest of your card code
-            );
+        return PetsPage();
+
       },
     );
   }
