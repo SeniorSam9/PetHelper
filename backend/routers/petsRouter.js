@@ -24,6 +24,7 @@ petsRouter.get("/", async (req, res) => {
     res.json({ status: true, data: pets });
 });
 // add pet
+
 petsRouter.post("/", async (req, res) => {
     const { uid, pet } = req.body;
     console.log(uid, pet);
