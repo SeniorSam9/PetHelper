@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/data.dart';
+import '../utilities/getImagePlatform.dart';
 
 class PetDetailsRoute extends StatelessWidget {
-
   final Pet pet;
 
   PetDetailsRoute({required this.pet});
@@ -14,39 +15,63 @@ class PetDetailsRoute extends StatelessWidget {
       appBar: AppBar(
         title: Text('Pet Details'),
       ),
-      body: Center(
-        child: Card(
-          elevation: 4.0,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.pets, size: 50),
-                title: Text(' ${pet.title}'),
-                subtitle: Text('Priority: Low\nLocation: Hajar, Dhahran'),
+      body: Card(
+        elevation: 4.0,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.pets, size: 50),
+              title: Text('${pet.title}'),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text("Priority: "),
+                      Icon(
+                        pet.urgency == "Not urgent"
+                            ? Icons.signal_cellular_alt_1_bar
+                            : pet.urgency == "Urgent"
+                                ? Icons.signal_cellular_alt_2_bar
+                                : Icons.signal_cellular_alt,
+                        color: Colors.red,
+                      ),
+                    ],
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      String googleMapsUrl =
+                          'https://maps.google.com/?q=${pet.lat},${pet.lng}';
+                      if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+                        // Check if the Google Maps app is installed
+                        await launchUrl(Uri.parse(googleMapsUrl));
+                      } else {
+                        // If the Google Maps app is not installed, open the URL in a browser
+                        await launchUrl(Uri.parse(googleMapsUrl));
+                      }
+                    },
+                    child: Text('link to Google Maps'),
+                  )
+                ],
               ),
-              Text(
-                'Title: sleepy cat',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              Container(
-                height: 200.0,
-                child: Ink.image(
-                  image: AssetImage(''),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Text(
-                'CONTACT ME',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-
-              Text(
-                'Description: this cat always sleep i want to ensure she eats instead of sleeping only etc.',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ],
-          ),
+            ),
+            Center(
+              child: Container(
+                  height: 200.0,
+                  child: getImagePlatform(pet.image.path, context)),
+            ),
+            // TODO: wrap all below with Column to separate the combined text not important
+            Text(
+              'CONTACT ME: ${pet.contact}',
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
+            Text(
+              'Description: ${pet.description}.',
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
+          ],
         ),
       ),
     );

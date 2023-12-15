@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:swe463_project/models/UserProvider.dart';
 import 'package:swe463_project/utilities/encode_decode.dart';
 
 class Pet {
@@ -79,11 +80,11 @@ class PetProvider extends ChangeNotifier {
   }
 
   List<Pet> get adoptedPets {
-    return _pets.where((pet) => pet.adopted).toList();
+    return _pets.where((pet) => pet.adopted && pet.user_id ==  UserProvider().user?.id).toList();
   }
 
   List<Pet> get reportedPets {
-    return _pets.where((pet) => !pet.adopted).toList();
+    return _pets.where((pet) => !pet.adopted && pet.user_id ==  UserProvider().user?.id).toList();
   }
 
   Future<void> fetchAndSetPets() async {

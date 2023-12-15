@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:swe463_project/models/data.dart';
 import '../routes/PetDetailsRoute.dart';
+import '../utilities/getImagePlatform.dart';
 
 class PetCard extends StatelessWidget {
   final Pet pet;
@@ -13,7 +14,6 @@ class PetCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
       ),
-      color: Colors.white,
       elevation: 5,
       child: InkWell(
         onTap: () async {
@@ -29,14 +29,10 @@ class PetCard extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              height: 100,
+              child: getImagePlatform(pet.image.path, context),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(
                   Radius.circular(18),
-                ),
-                image: DecorationImage(
-                  image: AssetImage(pet.image.path),
-                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -48,19 +44,9 @@ class PetCard extends StatelessWidget {
                 children: [
                   Text(
                     pet.title,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                    style: Theme.of(context).textTheme.labelMedium,
                   ),
-                  Text(
-                    pet.city,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                  ),
+                  Text(pet.city, style: Theme.of(context).textTheme.labelSmall),
                 ],
               ),
             ),
@@ -68,9 +54,8 @@ class PetCard extends StatelessWidget {
               bottom: 8,
               right: 8,
               child: IconButton(
-                icon: 5>5
-                    ? Icon(Icons.favorite)
-                    : Icon(Icons.favorite_border),
+                icon:
+                    5 > 5 ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
                 color: Colors.red,
                 onPressed: () {
                   // Handle heart button press
