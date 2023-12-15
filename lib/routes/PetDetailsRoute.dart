@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
-class PetDetails extends StatelessWidget {
+import '../models/data.dart';
+
+class PetDetailsRoute extends StatelessWidget {
+
+  final Pet pet;
+
+  PetDetailsRoute({required this.pet});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +22,7 @@ class PetDetails extends StatelessWidget {
             children: <Widget>[
               ListTile(
                 leading: Icon(Icons.pets, size: 50),
-                title: Text('Type: Cat'),
+                title: Text(' ${pet.title}'),
                 subtitle: Text('Priority: Low\nLocation: Hajar, Dhahran'),
               ),
               Text(
@@ -33,11 +40,7 @@ class PetDetails extends StatelessWidget {
                 'CONTACT ME',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              IconButton(
-                icon: Icon(Icons.favorite_border),
-                color: Colors.red,
-                onPressed: () {/* ... */},
-              ),
+
               Text(
                 'Description: this cat always sleep i want to ensure she eats instead of sleeping only etc.',
                 style: Theme.of(context).textTheme.titleLarge,

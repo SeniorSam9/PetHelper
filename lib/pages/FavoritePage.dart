@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:swe463_project/components/ListOfPets.dart';
 
 class FavoritePage extends StatefulWidget {
   @override
@@ -22,11 +21,11 @@ class _FavoritePageState extends State<FavoritePage> {
             )
           ].toSet(),
         ),
-
+        //TODO : handle logic of getting favorites only
 
         /// pet need help
         Text("Pets that need help"),
-        Expanded(child: ListOfPets()),
+        Expanded(child: Text("list of favorite pets")),
       ],
     );
   }
