@@ -8,13 +8,14 @@ import 'views/LoginView.dart';
 void main() {
   runApp(MultiProvider(
     providers: [
+      ChangeNotifierProvider<UserProvider>(create: (context) => UserProvider()),
+
       ChangeNotifierProvider<PetProvider>(
-        create: (context) => PetProvider(),
+        create: (context) => PetProvider(Provider.of<UserProvider>(context, listen: false)),
       ),
       ChangeNotifierProvider<ThemeProvider>(
         create: (context) => ThemeProvider(),
       ),
-      ChangeNotifierProvider<UserProvider>(create: (context) => UserProvider())
     ],
     child: const MyApp(),
   ));

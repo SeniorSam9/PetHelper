@@ -6,7 +6,9 @@ class UserProvider extends ChangeNotifier {
   User? get user => _user;
 
   void setUser({required String id}) {
+    print("Setting user with ID: $id");
     _user = User(id: id);
+    print("user id here is ${_user?.id}") ;
     notifyListeners();
   }
 }

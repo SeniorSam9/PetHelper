@@ -149,13 +149,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ElevatedButton(
                       onPressed: () async {
                         await petProvider.toggleAdopted(pet);
-                        //
-                        // setState(() {
-                        //
-                        // });
+
                       },
                       child: Text(
-                        pet.adopted ? "Reported" : "Adopted",
+                        pet.adopted ? "Make available" : "Adopted",
                       ),
                     ),
                   ],

@@ -12,8 +12,6 @@ class _PetsPageState extends State<PetsPage> {
   @override
   void initState() {
     super.initState();
-
-    Provider.of<PetProvider>(context, listen: false).fetchAndSetPets();
   }
 
   @override

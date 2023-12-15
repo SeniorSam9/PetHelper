@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:swe463_project/models/UserProvider.dart';
 import 'package:swe463_project/utilities/encode_decode.dart';
 
 class Pet {
@@ -15,7 +16,7 @@ class Pet {
   final double lat;
   final double lng;
   final String animal_type;
-  late final bool adopted;
+  bool adopted;
   final String description;
   final String contact;
   final String urgency;
@@ -72,6 +73,11 @@ class Pet {
 }
 
 class PetProvider extends ChangeNotifier {
+  final UserProvider _userProvider;
+
+  PetProvider(this._userProvider);
+
+
   List<Pet> _pets = [];
 
   List<Pet> get pets {
@@ -79,11 +85,19 @@ class PetProvider extends ChangeNotifier {
   }
 
   List<Pet> get adoptedPets {
-    return _pets.where((pet) => pet.adopted).toList();
+
+    String? userId = _userProvider.user?.id;
+
+
+    print( "user id is: $userId" ) ;
+
+    return _pets.where((pet) => pet.adopted && pet.user_id ==  userId).toList();
   }
 
   List<Pet> get reportedPets {
-    return _pets.where((pet) => !pet.adopted).toList();
+    String? userId = _userProvider.user?.id;
+    print( "user id in reported is: $userId" ) ;
+    return _pets.where((pet) => !pet.adopted && pet.user_id ==  userId).toList();
   }
 
   Future<void> fetchAndSetPets() async {
@@ -92,6 +106,8 @@ class PetProvider extends ChangeNotifier {
       final response = await http.get(url);
       final extractedData = json.decode(response.body);
       final loadedPets = extractedData['data'];
+
+       _pets = [] ;
 
       loadedPets.forEach((pet) async {
         _pets.add(Pet(
@@ -147,24 +163,29 @@ class PetProvider extends ChangeNotifier {
   Future<bool> toggleAdopted(Pet pet) async {
     // FIXME: add endpoint in backend /// Done.. did not change them
     // FIXME: fix code // Done
+    print("before toggle adopted: ${pet.adopted}") ;
     final url = Uri.parse('http://localhost:3300/pets');
     try {
       final response = await http.put(url,
           body: jsonEncode({
             'uid': pet.user_id,
             'petId': pet.id,
-            'pet': pet,
+            'pet': await pet.toJson(),
           }),
           headers: {'Content-Type': 'application/json'});
 
+        print("me inside toggleadopted") ;
       if (response.statusCode == 200) {
+        print("after toggle adopted: ${pet.adopted}") ;
         pet.adopted = !pet.adopted;
 
         notifyListeners();
         return true;
       }
+
       return false;
     } catch (error) {
+      print("togladopted error: $error");
       throw (error);
     }
   }
