@@ -107,6 +107,8 @@ class PetProvider extends ChangeNotifier {
       final extractedData = json.decode(response.body);
       final loadedPets = extractedData['data'];
 
+       _pets = [] ;
+
       loadedPets.forEach((pet) async {
         _pets.add(Pet(
           id: pet['id'],
