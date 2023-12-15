@@ -11,6 +11,7 @@ class PetDetailsRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO : enhance design NOT IMPORTANT
     return Scaffold(
       appBar: AppBar(
         title: Text('Pet Details'),
@@ -63,14 +64,26 @@ class PetDetailsRoute extends StatelessWidget {
                   child: getImagePlatform(pet.image.path, context)),
             ),
             // TODO: wrap all below with Column to separate the combined text not important
-            Text(
-              'CONTACT ME: ${pet.contact}',
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-            Text(
-              'Description: ${pet.description}.',
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
+            // TODO: Done but should be enhanced if there's time
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'CONTACT ME: ${pet.contact}',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                SizedBox(height: 16),
+
+                Text(
+                  'Description: ${pet.description}.',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+
+              ],
+            )
+
+           ,
+
           ],
         ),
       ),

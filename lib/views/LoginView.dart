@@ -44,6 +44,7 @@ class _LoginViewState extends State<LoginView> {
       if (response.statusCode == 201) {
         // successful response
         final jsonRes = jsonDecode(response.body);
+        print("json results are :  $jsonRes" ) ;
         Provider.of<UserProvider>(context, listen: false).setUser(id: jsonRes['data']);
         print('Login successful: $jsonRes');
         return true;
