@@ -19,7 +19,7 @@ class Pet {
   bool adopted;
   final String description;
   final String contact;
-  final String urgency;
+  String urgency;
 
   Pet({
     this.id,
@@ -147,15 +147,31 @@ class PetProvider extends ChangeNotifier {
   }
 
   Future<bool> toggleFavourite(Pet pet) async {
+
+    //TODO : below few lines for testing only
+
+    pet.urgency = "Not urgent" ;
+
+
     // FIXME: add endpoint in backend
     // FIXME: fix code
 
     final url = Uri.parse('http://localhost:3300/pets');
     try {
       final response = await http.put(url,
-          body: jsonEncode(pet), headers: {'Content-Type': 'application/json'});
-      if (response.statusCode == 200)
+          body: jsonEncode({
+            'uid': pet.user_id,
+            'petId': pet.id,
+            'pet': await pet.toJson(),
+          }),
+          headers: {'Content-Type': 'application/json'});
+      if (response.statusCode == 200){
+        notifyListeners();
         return true;
+
+      }
+      pet.urgency = "Urgent" ;
+
       return false;
     } catch (error) {
       throw (error);

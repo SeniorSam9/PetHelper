@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swe463_project/models/data.dart';
 import '../routes/PetDetailsRoute.dart';
 import '../utilities/getImagePlatform.dart';
@@ -29,7 +30,11 @@ class PetCard extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              child: getImagePlatform(pet.image.path, context),
+          height: 135,
+              width: 250,
+              child: ClipRRect(
+                child: getImagePlatform(pet.image.path, context, fit : BoxFit.cover),
+              ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(
                   Radius.circular(18),
@@ -53,15 +58,23 @@ class PetCard extends StatelessWidget {
             Positioned(
               bottom: 8,
               right: 8,
-              child: IconButton(
-                icon:
-                    5 > 5 ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
-                color: Colors.red,
-                onPressed: () {
-                  // Handle heart button press
-                  // You can implement your logic here, such as updating favorites, etc.
-                },
-              ),
+              child: Consumer<PetProvider>(
+                builder: (context, petProvider, _) {
+
+                return IconButton(
+                  icon:
+                   pet.urgency == 'Urgent' ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
+                  color: Colors.red,
+                  onPressed: () async {
+
+                 await  petProvider.toggleFavourite(pet) ;
+
+                    // Handle heart button press
+                    // You can implement your logic here, such as updating favorites, etc.
+                  },
+                  );
+
+          } ),
             ),
           ],
         ),
