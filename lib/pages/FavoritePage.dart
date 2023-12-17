@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../components/PetCard.dart';
+import '../models/data.dart';
 
-class FavoritePage extends StatefulWidget {
-  @override
-  _FavoritePageState createState() => _FavoritePageState();
-}
-
-class _FavoritePageState extends State<FavoritePage> {
+class FavoritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,11 +19,29 @@ class _FavoritePageState extends State<FavoritePage> {
             )
           ].toSet(),
         ),
-        //TODO : handle logic of getting favorites only
+        //TODO: handle logic of getting favorites only
 
         /// pet need help
         Text("Pets that need help"),
-        Expanded(child: Text("list of favorite pets")),
+        Expanded(
+          child: Consumer<PetProvider>(
+            builder: (context, petProvider, _) {
+              List<Pet> favoritePets = petProvider.pets;
+
+              return GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                ),
+                itemCount: favoritePets.length,
+                itemBuilder: (BuildContext context, index) {
+                  return PetCard(pet: favoritePets[index]);
+                },
+              );
+            },
+          ),
+        ),
       ],
     );
   }

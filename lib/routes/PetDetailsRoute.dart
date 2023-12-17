@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/data.dart';
 import '../utilities/getImagePlatform.dart';
@@ -42,15 +43,15 @@ class PetDetailsRoute extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () async {
-                      // String googleMapsUrl =
-                      //     'https://maps.google.com/?q=${pet.lat},${pet.lng}';
-                      // if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
-                      //   // Check if the Google Maps app is installed
-                      //   await launchUrl(Uri.parse(googleMapsUrl));
-                      // } else {
-                      //   // If the Google Maps app is not installed, open the URL in a browser
-                      //   await launchUrl(Uri.parse(googleMapsUrl));
-                      // }
+                      String googleMapsUrl =
+                          'https://maps.google.com/?q=${pet.lat},${pet.lng}';
+                      if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+                        // Check if the Google Maps app is installed
+                        await launchUrl(Uri.parse(googleMapsUrl));
+                      } else {
+                        // If the Google Maps app is not installed, open the URL in a browser
+                        await launchUrl(Uri.parse(googleMapsUrl));
+                      }
                     },
                     child: Text('link to Google Maps'),
                   )

@@ -19,7 +19,7 @@ class Pet {
   bool adopted;
   final String description;
   final String contact;
-  final String urgency;
+  String urgency;
 
   Pet({
     this.id,
@@ -147,13 +147,31 @@ class PetProvider extends ChangeNotifier {
   }
 
   Future<bool> toggleFavourite(Pet pet) async {
+
+    //TODO : below few lines for testing only
+
+    pet.urgency = "Not urgent" ;
+
+
     // FIXME: add endpoint in backend
     // FIXME: fix code
+
     final url = Uri.parse('http://localhost:3300/pets');
     try {
       final response = await http.put(url,
-          body: jsonEncode(pet), headers: {'Content-Type': 'application/json'});
-      if (response.statusCode == 200) return true;
+          body: jsonEncode({
+            'uid': pet.user_id,
+            'petId': pet.id,
+            'pet': await pet.toJson(),
+          }),
+          headers: {'Content-Type': 'application/json'});
+      if (response.statusCode == 200){
+        notifyListeners();
+        return true;
+
+      }
+      pet.urgency = "Urgent" ;
+
       return false;
     } catch (error) {
       throw (error);
@@ -163,6 +181,7 @@ class PetProvider extends ChangeNotifier {
   Future<bool> toggleAdopted(Pet pet) async {
     // FIXME: add endpoint in backend /// Done.. did not change them
     // FIXME: fix code // Done
+    pet.adopted = !pet.adopted;
     print("before toggle adopted: ${pet.adopted}") ;
     final url = Uri.parse('http://localhost:3300/pets');
     try {
@@ -177,12 +196,12 @@ class PetProvider extends ChangeNotifier {
         print("me inside toggleadopted") ;
       if (response.statusCode == 200) {
         print("after toggle adopted: ${pet.adopted}") ;
-        pet.adopted = !pet.adopted;
+
 
         notifyListeners();
         return true;
       }
-
+      pet.adopted = !pet.adopted;
       return false;
     } catch (error) {
       print("togladopted error: $error");
