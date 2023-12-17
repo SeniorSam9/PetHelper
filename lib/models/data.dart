@@ -135,12 +135,20 @@ class PetProvider extends ChangeNotifier {
   Future<bool> addPet(Pet pet) async {
     final url = Uri.parse('http://localhost:3300/pets');
     try {
+      _pets.add(pet) ;
       final response = await http.post(url,
           body:
               await jsonEncode({'pet': await pet.toJson(), 'uid': pet.user_id}),
           headers: {'Content-Type': 'application/json'});
-      if (response.statusCode == 200) return true;
-      return false;
+      if (response.statusCode == 200){
+        notifyListeners();
+        return true;
+      }
+      else{
+        _pets.remove(pet) ;
+        notifyListeners() ;
+        return false;
+      }
     } catch (error) {
       throw (error);
     }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:swe463_project/models/ThemeProvider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,97 +21,166 @@ class PetDetailsRoute extends StatelessWidget {
       body: Card(
         elevation: 4.0,
         color: Provider.of<ThemeProvider>(context).currentTheme.cardColor,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.pets, size: 50),
-              title: Text('${pet.title}'),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text("Priority: "),
-                      Icon(
-                        pet.urgency == "Not urgent"
-                            ? Icons.signal_cellular_alt_1_bar
-                            : pet.urgency == "Urgent"
-                                ? Icons.signal_cellular_alt_2_bar
-                                : Icons.signal_cellular_alt,
-                        color: Colors.red,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Center(
-              child: Container(
-                  height: 200.0,
-                  child: getImagePlatform(pet.image.path, context)),
-            ),
-            Expanded(
-              flex: 1,
-              child: Center(
-                child: Column(
+        child: Padding(
+
+          padding: const EdgeInsets.fromLTRB(10, 4, 1, 2),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ListTile(
+                trailing: Icon(Icons.pets, size: 50),
+                title: Text('${pet.title}'),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Urgency: ${pet.urgency}',
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Type: ${pet.animal_type}',
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      'Location: ',
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    TextButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll<Color>(
-                              Color(0xFF827397))),
-                      onPressed: () async {
-                        String googleMapsUrl =
-                            'https://maps.google.com/?q=${pet.lat},${pet.lng}';
-                        if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
-                          // Check if the Google Maps app is installed
-                          await launchUrl(Uri.parse(googleMapsUrl));
-                        } else {
-                          // If the Google Maps app is not installed, open the URL in a browser
-                          await launchUrl(Uri.parse(googleMapsUrl));
-                        }
-                      },
-                      child: Text('Reach it using Google Maps'),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'CONTACT ME: ${pet.contact}',
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                    SizedBox(height: 24),
-                    Text(
-                      'Description: ${pet.description}.',
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
                   ],
                 ),
               ),
-            )
-          ],
+              Center(
+                child: Container(
+                    height: 200.0,
+                    child: getImagePlatform(pet.image.path, context, fit: BoxFit.cover)),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Pet type: ${pet.animal_type}',
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  Text(
+                    'City: ${pet.city}',
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text("Priority: "
+                          , style: Theme.of(context).textTheme.labelMedium
+                      ),
+                      Icon(
+                          size: 45,
+                          // size: 60 ,
+                          pet.urgency == "Not urgent"
+                              ? Icons.signal_cellular_alt_1_bar
+                              : pet.urgency == "Urgent"
+                              ? Icons.signal_cellular_alt_2_bar
+                              : Icons.signal_cellular_alt,
+                          color:
+                          pet.urgency == "Not urgent" ? Colors.yellow : pet.urgency == "Urgent" ? Colors.orange : Colors.red
+
+                      ),
+                      Text(
+
+                          pet.urgency,
+                          style: Theme.of(context).textTheme.labelMedium
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Description: ${pet.description}.',
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Card(
+                          elevation: 4.0,
+                          color: Theme.of(context).primaryColor,
+                          child: InkWell(
+                            onTap: () async {
+                              String googleMapsUrl =
+                                  'https://maps.google.com/?q=${pet.lat},${pet.lng}';
+                              if (await canLaunchUrl(Uri.parse(googleMapsUrl))) {
+                                await launchUrl(Uri.parse(googleMapsUrl));
+                              } else {
+                                await launchUrl(Uri.parse(googleMapsUrl));
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
+                                    size: 22,
+                                    color: Colors.blue,
+                                  ),
+                                  SizedBox(width: 16),
+                                  Text(
+                                    "Pet's Location",
+                                    style: Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Card(
+                          elevation: 4.0,
+                          color: Theme.of(context).primaryColor,
+                          child: InkWell(
+                            onTap: () async {
+                              await Clipboard.setData(
+                                  ClipboardData(text: pet.contact));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Contact copied to clipboard"),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.contact_phone,
+                                    size: 22,
+                                    color: Colors.green,
+                                  ),
+                                  SizedBox(width: 12),
+                                  Text(
+                                    "Contact Me",
+                                    style: Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+
+
+                        ],
+              )
+            ],
+          ),
         ),
       ),
     );

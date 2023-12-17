@@ -9,7 +9,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int maxPets = 5; // maximum number of pets
+  int maxPets = 6; // maximum number of pets
 
   @override
   Widget build(BuildContext context) {
