@@ -8,21 +8,8 @@ class FavoritePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        /// search
-        SearchBar(
-          trailing: [
-            IconButton(
-              icon: Icon(Icons.search_outlined),
-              onPressed: () {
-                // TODO: Handle search
-              },
-            )
-          ].toSet(),
-        ),
-        //TODO: handle logic of getting favorites only
 
-        /// pet need help
-        Text("Pets that need help"),
+        /// Favourite
         Expanded(
           child: Consumer<PetProvider>(
             builder: (context, petProvider, _) {
