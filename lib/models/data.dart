@@ -77,7 +77,6 @@ class PetProvider extends ChangeNotifier {
 
   PetProvider(this._userProvider);
 
-
   List<Pet> _pets = [];
   List<Pet> _favoritePets = [];
 
@@ -89,21 +88,17 @@ class PetProvider extends ChangeNotifier {
     return [..._favoritePets];
   }
 
-
   List<Pet> get adoptedPets {
-
     String? userId = _userProvider.user?.id;
 
+    print("user id is: $userId");
 
-    print( "user id is: $userId" ) ;
-
-    return _pets.where((pet) => pet.adopted && pet.user_id ==  userId).toList();
+    return _pets.where((pet) => pet.adopted && pet.user_id == userId).toList();
   }
 
   List<Pet> get reportedPets {
     String? userId = _userProvider.user?.id;
-    print( "user id in reported is: $userId" ) ;
-    return _pets.where((pet) => !pet.adopted && pet.user_id ==  userId).toList();
+    return _pets.where((pet) => !pet.adopted && pet.user_id == userId).toList();
   }
 
   Future<void> fetchAndSetPets() async {
@@ -113,7 +108,7 @@ class PetProvider extends ChangeNotifier {
       final extractedData = json.decode(response.body);
       final loadedPets = extractedData['data'];
 
-       _pets = [] ;
+      _pets = [];
 
       loadedPets.forEach((pet) async {
         _pets.add(Pet(
@@ -147,7 +142,6 @@ class PetProvider extends ChangeNotifier {
       if (response.statusCode == 200) return true;
       return false;
     } catch (error) {
-      print("err: $error");
       throw (error);
     }
   }
@@ -157,40 +151,31 @@ class PetProvider extends ChangeNotifier {
 
     final url = Uri.parse('http://localhost:3300/pets/favorites/$userId');
 
-    _favoritePets=[];
+    _favoritePets = [];
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body);
       final favoritePetIds = extractedData['data'];
 
-      List<String> result=[];
-      favoritePetIds.forEach((element) => result.add(element['petId'].toString()));
+      List<String> result = [];
+      favoritePetIds
+          .forEach((element) => result.add(element['petId'].toString()));
 
-      print("object");
-      print(result);
       for (Pet pet in _pets) {
         if (result.contains(pet.id)) {
           _favoritePets.add(pet);
         }
       }
-      // _favoritePets = _pets.where((pet) => result.contains(pet.id!)).toList();
-
-
-
       notifyListeners();
     } catch (error) {
       throw (error);
     }
   }
 
-
-
   Future<bool> toggleFavourite(Pet pet) async {
-    print("im inside the toggle method") ;
     try {
-
-      if (_favoritePets.contains(pet)){
-        _favoritePets.remove(pet) ;
+      if (_favoritePets.contains(pet)) {
+        _favoritePets.remove(pet);
         final url = Uri.parse('http://localhost:3300/pets/favorite');
         final response = await http.delete(url,
             body: jsonEncode({
@@ -199,16 +184,12 @@ class PetProvider extends ChangeNotifier {
             }),
             headers: {'Content-Type': 'application/json'});
 
-        if (response.statusCode == 200){
-          // _favoritePets.add(pet) ;
+        if (response.statusCode == 200) {
           notifyListeners();
-          return false;}
-      }
-      else{
-        print("i will add the pet now then") ;
-
-        _favoritePets.add(pet) ;
-        print(_favoritePets[0].title) ;
+          return false;
+        }
+      } else {
+        _favoritePets.add(pet);
         final url = Uri.parse('http://localhost:3300/pets/favorite');
         final response = await http.post(url,
             body: jsonEncode({
@@ -217,25 +198,20 @@ class PetProvider extends ChangeNotifier {
             }),
             headers: {'Content-Type': 'application/json'});
 
-        if (response.statusCode == 200){
-          // _favoritePets.remove(pet) ;
+        if (response.statusCode == 200) {
           notifyListeners();
           return false;
         }
-
       }
       notifyListeners();
-      return true ;
-
+      return true;
     } catch (error) {
       throw (error);
     }
   }
 
   Future<bool> toggleAdopted(Pet pet) async {
-
     pet.adopted = !pet.adopted;
-    print("before toggle adopted: ${pet.adopted}") ;
     final url = Uri.parse('http://localhost:3300/pets');
     try {
       final response = await http.put(url,
@@ -246,18 +222,13 @@ class PetProvider extends ChangeNotifier {
           }),
           headers: {'Content-Type': 'application/json'});
 
-        print("me inside toggleadopted") ;
       if (response.statusCode == 200) {
-        print("after toggle adopted: ${pet.adopted}") ;
-
-
         notifyListeners();
         return true;
       }
       pet.adopted = !pet.adopted;
       return false;
     } catch (error) {
-      print("togladopted error: $error");
       throw (error);
     }
   }
