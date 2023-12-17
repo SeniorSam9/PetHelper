@@ -81,7 +81,7 @@ petsRouter.put("/", async (req, res) => {
 petsRouter.post("/favorite", async (req, res) => {
     try {
         const { petId, userId } = req.body;
-        const favoritesRef = collection(db, "User",userId, "Favorites", petId );
+        const favoritesRef = collection(db, "User", userId, "Favorites");
         await addDoc(favoritesRef, { petId, userId });
         res.json({ status: true });
     } catch (error) {
@@ -94,7 +94,7 @@ petsRouter.post("/favorite", async (req, res) => {
 petsRouter.delete("/favorite", async (req, res) => {
     try {
         const { petId, userId } = req.body;
-        const favoritesRef = collection(db, "User",userId, "Favorites", petId );
+        const favoritesRef = collection(db, "User", userId, "Favorites");
         const querySnapshot = await getDocs(favoritesRef);
         const favoriteDoc = querySnapshot.docs.find(
             (doc) => doc.data().petId === petId && doc.data().userId === userId
@@ -102,7 +102,10 @@ petsRouter.delete("/favorite", async (req, res) => {
 
         if (favoriteDoc) {
             await deleteDoc(doc(favoritesRef, favoriteDoc.id));
-            res.json({ status: true, message: "Favorite deleted successfully." });
+            res.json({
+                status: true,
+                message: "Favorite deleted successfully.",
+            });
         } else {
             res.status(404).json({ error: "Favorite not found." });
         }
@@ -123,6 +126,7 @@ petsRouter.get("/favorites/:userId", async (req, res) => {
             // Assuming each document contains a "petId" field
             return { petId: doc.data().petId };
         });
+        console.log("FAV: ", favoritePets);
 
         res.json({ status: true, data: favoritePets });
     } catch (error) {
@@ -130,4 +134,3 @@ petsRouter.get("/favorites/:userId", async (req, res) => {
         res.status(500).json({ error: "Failed to get favorite pets." });
     }
 });
-

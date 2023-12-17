@@ -157,12 +157,25 @@ class PetProvider extends ChangeNotifier {
 
     final url = Uri.parse('http://localhost:3300/pets/favorites/$userId');
 
+    _favoritePets=[];
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body);
-      final favoritePetIds = List<String>.from(extractedData['data']);
+      final favoritePetIds = extractedData['data'];
 
-      _favoritePets = _pets.where((pet) => favoritePetIds.contains(pet.id)).toList();
+      List<String> result=[];
+      favoritePetIds.forEach((element) => result.add(element['petId'].toString()));
+
+      print("object");
+      print(result);
+      for (Pet pet in _pets) {
+        if (result.contains(pet.id)) {
+          _favoritePets.add(pet);
+        }
+      }
+      // _favoritePets = _pets.where((pet) => result.contains(pet.id!)).toList();
+
+
 
       notifyListeners();
     } catch (error) {
@@ -187,7 +200,7 @@ class PetProvider extends ChangeNotifier {
             headers: {'Content-Type': 'application/json'});
 
         if (response.statusCode == 200){
-          _favoritePets.add(pet) ;
+          // _favoritePets.add(pet) ;
           notifyListeners();
           return false;}
       }
@@ -205,7 +218,7 @@ class PetProvider extends ChangeNotifier {
             headers: {'Content-Type': 'application/json'});
 
         if (response.statusCode == 200){
-          _favoritePets.remove(pet) ;
+          // _favoritePets.remove(pet) ;
           notifyListeners();
           return false;
         }

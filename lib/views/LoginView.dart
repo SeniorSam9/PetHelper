@@ -223,8 +223,11 @@ class _LoginViewState extends State<LoginView> {
                           const SnackBar(content: Text('Loading...')),
                         );
                         if (await submitLoginForm()) {
+
                           await Provider.of<PetProvider>(context, listen: false)
                               .fetchAndSetPets();
+                          await Provider.of<PetProvider>(context, listen: false).fetchAndSetFavoritePets();
+
 
                           Navigator.pushReplacement(
                             context,
