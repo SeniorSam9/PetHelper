@@ -79,10 +79,16 @@ class PetProvider extends ChangeNotifier {
 
 
   List<Pet> _pets = [];
+  List<Pet> _favoritePets = [];
 
   List<Pet> get pets {
     return [..._pets];
   }
+
+  List<Pet> get favoritePets {
+    return [..._favoritePets];
+  }
+
 
   List<Pet> get adoptedPets {
 
@@ -146,41 +152,75 @@ class PetProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> toggleFavourite(Pet pet) async {
+  Future<void> fetchAndSetFavoritePets() async {
+    String? userId = _userProvider.user?.id;
 
-    //TODO : below few lines for testing only
+    final url = Uri.parse('http://localhost:3300/pets/favorites/$userId');
 
-    pet.urgency = "Not urgent" ;
-
-
-    // FIXME: add endpoint in backend
-    // FIXME: fix code
-
-    final url = Uri.parse('http://localhost:3300/pets');
     try {
-      final response = await http.put(url,
-          body: jsonEncode({
-            'uid': pet.user_id,
-            'petId': pet.id,
-            'pet': await pet.toJson(),
-          }),
-          headers: {'Content-Type': 'application/json'});
-      if (response.statusCode == 200){
-        notifyListeners();
-        return true;
+      final response = await http.get(url);
+      final extractedData = json.decode(response.body);
+      final favoritePetIds = List<String>.from(extractedData['data']);
+
+      _favoritePets = _pets.where((pet) => favoritePetIds.contains(pet.id)).toList();
+
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+
+
+  Future<bool> toggleFavourite(Pet pet) async {
+    print("im inside the toggle method") ;
+    try {
+
+      if (_favoritePets.contains(pet)){
+        _favoritePets.remove(pet) ;
+        final url = Uri.parse('http://localhost:3300/pets/favorite');
+        final response = await http.delete(url,
+            body: jsonEncode({
+              'petId': pet.id,
+              'userId': _userProvider.user?.id,
+            }),
+            headers: {'Content-Type': 'application/json'});
+
+        if (response.statusCode == 200){
+          _favoritePets.add(pet) ;
+          notifyListeners();
+          return false;}
+      }
+      else{
+        print("i will add the pet now then") ;
+
+        _favoritePets.add(pet) ;
+        print(_favoritePets[0].title) ;
+        final url = Uri.parse('http://localhost:3300/pets/favorite');
+        final response = await http.post(url,
+            body: jsonEncode({
+              'petId': pet.id,
+              'userId': _userProvider.user?.id,
+            }),
+            headers: {'Content-Type': 'application/json'});
+
+        if (response.statusCode == 200){
+          _favoritePets.remove(pet) ;
+          notifyListeners();
+          return false;
+        }
 
       }
-      pet.urgency = "Urgent" ;
+      notifyListeners();
+      return true ;
 
-      return false;
     } catch (error) {
       throw (error);
     }
   }
 
   Future<bool> toggleAdopted(Pet pet) async {
-    // FIXME: add endpoint in backend /// Done.. did not change them
-    // FIXME: fix code // Done
+
     pet.adopted = !pet.adopted;
     print("before toggle adopted: ${pet.adopted}") ;
     final url = Uri.parse('http://localhost:3300/pets');

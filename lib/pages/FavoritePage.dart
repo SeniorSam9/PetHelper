@@ -26,7 +26,7 @@ class FavoritePage extends StatelessWidget {
         Expanded(
           child: Consumer<PetProvider>(
             builder: (context, petProvider, _) {
-              List<Pet> favoritePets = petProvider.pets;
+              List<Pet> favoritePets = petProvider.favoritePets;
 
               return GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

@@ -76,3 +76,58 @@ petsRouter.put("/", async (req, res) => {
     await updateDoc(ref, pet);
     res.json({ status: true });
 });
+
+// add favorite
+petsRouter.post("/favorite", async (req, res) => {
+    try {
+        const { petId, userId } = req.body;
+        const favoritesRef = collection(db, "User",userId, "Favorites", petId );
+        await addDoc(favoritesRef, { petId, userId });
+        res.json({ status: true });
+    } catch (error) {
+        console.error("Error adding favorite:", error);
+        res.status(500).json({ error: "Failed to add favorite." });
+    }
+});
+
+// delete favorite
+petsRouter.delete("/favorite", async (req, res) => {
+    try {
+        const { petId, userId } = req.body;
+        const favoritesRef = collection(db, "User",userId, "Favorites", petId );
+        const querySnapshot = await getDocs(favoritesRef);
+        const favoriteDoc = querySnapshot.docs.find(
+            (doc) => doc.data().petId === petId && doc.data().userId === userId
+        );
+
+        if (favoriteDoc) {
+            await deleteDoc(doc(favoritesRef, favoriteDoc.id));
+            res.json({ status: true, message: "Favorite deleted successfully." });
+        } else {
+            res.status(404).json({ error: "Favorite not found." });
+        }
+    } catch (error) {
+        console.error("Error deleting favorite:", error);
+        res.status(500).json({ error: "Failed to delete favorite." });
+    }
+});
+
+// Assuming you have a route like "/favorites/:userId" where ":userId" is the user ID
+petsRouter.get("/favorites/:userId", async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const favoritesRef = collection(db, "User", userId, "Favorites");
+        const querySnapshot = await getDocs(favoritesRef);
+
+        const favoritePets = querySnapshot.docs.map((doc) => {
+            // Assuming each document contains a "petId" field
+            return { petId: doc.data().petId };
+        });
+
+        res.json({ status: true, data: favoritePets });
+    } catch (error) {
+        console.error("Error getting favorite pets:", error);
+        res.status(500).json({ error: "Failed to get favorite pets." });
+    }
+});
+

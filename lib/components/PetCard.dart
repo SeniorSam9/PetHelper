@@ -60,17 +60,12 @@ class PetCard extends StatelessWidget {
               right: 8,
               child: Consumer<PetProvider>(
                 builder: (context, petProvider, _) {
-
+                  bool isFavorite = petProvider.favoritePets.contains(pet);
                 return IconButton(
-                  icon:
-                   pet.urgency == 'Urgent' ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
+                  icon: isFavorite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
                   color: Colors.red,
                   onPressed: () async {
-
                  await  petProvider.toggleFavourite(pet) ;
-
-                    // Handle heart button press
-                    // You can implement your logic here, such as updating favorites, etc.
                   },
                   );
 
