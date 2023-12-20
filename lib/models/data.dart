@@ -81,7 +81,10 @@ class PetProvider extends ChangeNotifier {
   List<Pet> _favoritePets = [];
 
   List<Pet> get pets {
-    return _pets.where((pet) => !pet.adopted).toList();  }
+    return [..._pets] ; }
+  List<Pet> get availablePets{
+    return _pets.where((pet) => !pet.adopted).toList() ;
+  }
 
   List<Pet> get favoritePets {
     return [..._favoritePets];

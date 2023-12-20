@@ -8,7 +8,7 @@ class PetsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<PetProvider>(
         builder: (context, petProvider, _) {
-          List<Pet> pets = petProvider.pets;
+          List<Pet> pets = petProvider.availablePets;
 
           return GridView.builder(
             padding: EdgeInsets.all(8),

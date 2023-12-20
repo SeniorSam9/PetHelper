@@ -13,7 +13,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Pet> pets = Provider.of<PetProvider>(context).pets;
+    List<Pet> pets = Provider.of<PetProvider>(context).availablePets;
 
     return Container(
       width: double.maxFinite,
