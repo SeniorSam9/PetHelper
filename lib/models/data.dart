@@ -81,8 +81,7 @@ class PetProvider extends ChangeNotifier {
   List<Pet> _favoritePets = [];
 
   List<Pet> get pets {
-    return [..._pets];
-  }
+    return _pets.where((pet) => !pet.adopted).toList();  }
 
   List<Pet> get favoritePets {
     return [..._favoritePets];
@@ -111,6 +110,7 @@ class PetProvider extends ChangeNotifier {
       _pets = [];
 
       loadedPets.forEach((pet) async {
+
         _pets.add(Pet(
           id: pet['id'],
           user_id: pet['user_id'],
