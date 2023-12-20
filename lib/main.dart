@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swe463_project/models/ThemeProvider.dart';
-import 'package:swe463_project/models/UserProvider.dart';
-import 'package:swe463_project/models/data.dart';
-import 'views/LoginView.dart';
+
+import 'features/authentication/model/UserProvider.dart';
+import 'features/authentication/presentation/LoginView.dart';
+import 'features/common/utilities/ThemeProvider.dart';
+import 'features/common/data.dart';
+
 
 void main() {
   runApp(MultiProvider(

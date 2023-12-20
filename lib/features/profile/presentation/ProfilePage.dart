@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swe463_project/utilities/getImagePlatform.dart';
 
-import '../models/data.dart';
+import '../../common/data.dart';
+import '../../common/utilities/getImagePlatform.dart';
 
 class ProfilePage extends StatefulWidget {
   @override

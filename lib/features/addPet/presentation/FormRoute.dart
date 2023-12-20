@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:swe463_project/models/UserProvider.dart';
-import 'package:swe463_project/models/data.dart';
-import 'package:swe463_project/utilities/cityFinder.dart';
-import '../utilities/getImagePlatform.dart';
-import '../utilities/locationFinder.dart';
-import '../utilities/imagePicker.dart';
-import '../components/CustomRadioButtonForPets.dart';
-import '../components/CustomRadioButton.dart';
+import 'package:swe463_project/features/addPet/presentation/widgets/CustomRadioButton.dart';
+import 'package:swe463_project/features/addPet/presentation/widgets/CustomRadioButtonForPets.dart';
+
+
+import '../../authentication/model/UserProvider.dart';
+import '../../common/data.dart';
+import '../../common/utilities/getImagePlatform.dart';
+import '../model/cityFinder.dart';
+import '../model/locationFinder.dart';
+import '../model/imagePicker.dart';
+
+
 
 class FormRoute extends StatefulWidget {
   @override
