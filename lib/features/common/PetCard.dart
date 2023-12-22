@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swe463_project/models/data.dart';
-import '../routes/PetDetailsRoute.dart';
-import '../utilities/getImagePlatform.dart';
+import 'package:swe463_project/features/common/utilities/getImagePlatform.dart';
+
+import 'PetDetailsRoute.dart';
+import 'data.dart';
+
 
 class PetCard extends StatelessWidget {
   final Pet pet;

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../routes/FormRoute.dart';
-import '../views/LoginView.dart';
+import '../addPet/presentation/FormRoute.dart';
+import '../authentication/presentation/LoginView.dart';
 
-import '../pages/HomePage.dart';
-import '../pages/PetsPage.dart';
-import '../pages/FavoritePage.dart';
-import '../pages/ProfilePage.dart';
+
+import '../favorite/presentation/FavoritePage.dart';
+import '../pets/presentation/HomePage.dart';
+import '../pets/presentation/PetsPage.dart';
+import '../profile/presentation/ProfilePage.dart';
 
 class MainView extends StatefulWidget {
   @override

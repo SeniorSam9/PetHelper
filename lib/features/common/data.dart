@@ -3,8 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:swe463_project/models/UserProvider.dart';
-import 'package:swe463_project/utilities/encode_decode.dart';
+import 'package:swe463_project/features/common/utilities/encode_decode.dart';
+
+import '../authentication/model/UserProvider.dart';
+
 
 class Pet {
   late final String? id;

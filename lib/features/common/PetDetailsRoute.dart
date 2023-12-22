@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:swe463_project/models/ThemeProvider.dart';
+import 'package:swe463_project/features/common/utilities/getImagePlatform.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
-import '../models/data.dart';
-import '../utilities/getImagePlatform.dart';
+import 'utilities/ThemeProvider.dart';
+import 'data.dart';
 
 class PetDetailsRoute extends StatelessWidget {
   final Pet pet;

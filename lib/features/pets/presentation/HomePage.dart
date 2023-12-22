@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../components/PetCard.dart';
-import '../models/data.dart';
+
+import '../../common/PetCard.dart';
+import '../../common/data.dart';
+
 
 class HomePage extends StatefulWidget {
   @override

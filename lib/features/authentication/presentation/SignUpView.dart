@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import '../models/ThemeProvider.dart';
+import '../../common/utilities/ThemeProvider.dart';
 import 'package:http/http.dart' as http;
 import 'LoginView.dart';
 

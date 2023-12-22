@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Import the Provider package
-import '../components/PetCard.dart';
-import '../models/data.dart';
+import 'package:provider/provider.dart';
+
+import '../../common/PetCard.dart';
+import '../../common/data.dart'; // Import the Provider package
+
 
 class PetsPage extends StatelessWidget {
   @override
